@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#1a0a00" />
+  <title>Rung Chuông Vàng 2026-2027</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&display=swap');
+
+    :root {
+      --gold: #FFD700;
+      --gold-dark: #B8860B;
+      --gold-light: #FFF4B0;
+      --red: #C0392B;
+      --red-dark: #922B21;
+      --green: #27AE60;
+      --green-dark: #1E8449;
+      --blue: #2980B9;
+      --bg: #1a0a00;
+      --card: rgba(255,255,255,0.06);
+      --text: #fff;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Baloo 2', 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-image:
+        radial-gradient(ellipse at 20% 50%, rgba(180,120,0,0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(180,60,0,0.12) 0%, transparent 40%);
+    }
+
+    /* ========== SCREEN SYSTEM ========== */
+    .screen { display: none; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+    .screen.active { display: flex; }
+
+    /* ========== WELCOME SCREEN ========== */
+    #screen-welcome {
+      text-align: center;
+      gap: 30px;
+    }
+
+    .bell-icon {
+      font-size: 80px;
+      animation: swing 2s ease-in-out infinite;
+      filter: drop-shadow(0 0 20px rgba(255,215,0,0.8));
+    }
+
+    @keyframes swing {
+      0%, 100% { transform: rotate(-15deg); }
+      50% { transform: rotate(15deg); }
+    }
+
+    .game-title {
+      font-size: clamp(28px, 6vw, 52px);
+      font-weight: 800;
+      background: linear-gradient(135deg, #FFD700, #FF8C00, #FFD700);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: none;
+      letter-spacing: 1px;
+      line-height: 1.2;
+    }
+
+    .subtitle {
+      color: rgba(255,255,255,0.6);
+      font-size: 16px;
+    }
+
+    .mode-cards {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 10px;
+    }
+
+    .mode-card {
+      background: linear-gradient(135deg, rgba(255,215,0,0.1), rgba(255,140,0,0.08));
+      border: 2px solid rgba(255,215,0,0.3);
+      border-radius: 20px;
+      padding: 30px 40px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      max-width: 280px;
+      text-align: center;
+    }
+
+    .mode-card:hover {
+      border-color: var(--gold);
+      background: linear-gradient(135deg, rgba(255,215,0,0.2), rgba(255,140,0,0.15));
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(255,215,0,0.2);
+    }
+
+    .mode-card .mode-icon { font-size: 48px; margin-bottom: 12px; }
+    .mode-card .mode-name { font-size: 20px; font-weight: 700; color: var(--gold); margin-bottom: 8px; }
+    .mode-card .mode-desc { font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5; }
+
+    /* ========== GAME SCREEN ========== */
+    #screen-game {
+      justify-content: flex-start;
+      padding: 20px;
+      gap: 0;
+    }
+
+    .game-header {
+      width: 100%;
+      max-width: 800px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      padding: 12px 20px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 16px;
+      border: 1px solid rgba(255,215,0,0.15);
+    }
+
+    .question-counter {
+      font-size: 14px;
+      color: rgba(255,255,255,0.6);
+    }
+
+    .question-counter span {
+      color: var(--gold);
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    .lang-badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .lang-badge.vi { background: rgba(192,57,43,0.3); border: 1px solid rgba(192,57,43,0.6); color: #FF8F7A; }
+    .lang-badge.en { background: rgba(41,128,185,0.3); border: 1px solid rgba(41,128,185,0.6); color: #7EC8E3; }
+
+    .progress-bar {
+      width: 100%;
+      max-width: 800px;
+      height: 6px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold-dark), var(--gold));
+      border-radius: 10px;
+      transition: width 0.5s ease;
+    }
+
+    .question-card {
+      width: 100%;
+      max-width: 800px;
+      background: rgba(255,255,255,0.05);
+      border: 2px solid rgba(255,215,0,0.2);
+      border-radius: 24px;
+      padding: 30px;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .question-num-label {
+      font-size: 12px;
+      color: rgba(255,215,0,0.6);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+    }
+
+    .question-text {
+      font-size: clamp(16px, 3vw, 22px);
+      font-weight: 600;
+      line-height: 1.6;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .speak-btn {
+      background: none;
+      border: 1px solid rgba(255,215,0,0.3);
+      color: var(--gold);
+      padding: 6px 14px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 13px;
+      margin-top: 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .speak-btn:hover { background: rgba(255,215,0,0.1); border-color: var(--gold); }
+    .speak-btn.speaking { background: rgba(255,215,0,0.15); animation: pulse 1s infinite; }
+
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+
+    .answers-grid {
+      width: 100%;
+      max-width: 800px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .answer-btn {
+      background: rgba(255,255,255,0.05);
+      border: 2px solid rgba(255,255,255,0.12);
+      border-radius: 16px;
+      padding: 16px 20px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: clamp(14px, 2.5vw, 17px);
+      font-weight: 600;
+      color: #fff;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .answer-btn:hover:not(:disabled) {
+      border-color: rgba(255,215,0,0.5);
+      background: rgba(255,215,0,0.08);
+      transform: translateX(4px);
+    }
+
+    .answer-btn .letter {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255,215,0,0.15);
+      border: 2px solid rgba(255,215,0,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--gold);
+      flex-shrink: 0;
+    }
+
+    .answer-btn.correct {
+      border-color: var(--green) !important;
+      background: rgba(39,174,96,0.2) !important;
+      animation: correctPulse 0.5s ease;
+    }
+
+    .answer-btn.correct .letter {
+      background: var(--green);
+      border-color: var(--green);
+      color: #fff;
+    }
+
+    .answer-btn.wrong {
+      border-color: var(--red) !important;
+      background: rgba(192,57,43,0.2) !important;
+      animation: shake 0.5s ease;
+    }
+
+    .answer-btn.wrong .letter {
+      background: var(--red);
+      border-color: var(--red);
+      color: #fff;
+    }
+
+    .answer-btn:disabled { cursor: not-allowed; }
+
+    @keyframes correctPulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-8px); }
+      40% { transform: translateX(8px); }
+      60% { transform: translateX(-6px); }
+      80% { transform: translateX(6px); }
+    }
+
+    /* ========== RESULT OVERLAY ========== */
+    .result-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+      padding: 20px;
+    }
+
+    .result-overlay.show { opacity: 1; pointer-events: all; }
+
+    .result-icon { font-size: 80px; margin-bottom: 16px; }
+    .result-title { font-size: 32px; font-weight: 800; margin-bottom: 8px; }
+    .result-subtitle { font-size: 16px; color: rgba(255,255,255,0.7); margin-bottom: 24px; text-align: center; max-width: 400px; }
+
+    .result-overlay.correct-result .result-icon { animation: bounceIn 0.5s ease; }
+    .result-overlay.wrong-result .result-icon { animation: bounceIn 0.5s ease; }
+
+    @keyframes bounceIn {
+      0% { transform: scale(0.3); opacity: 0; }
+      60% { transform: scale(1.1); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* ========== GAME OVER SCREEN ========== */
+    #screen-gameover {
+      text-align: center;
+      gap: 20px;
+    }
+
+    .gameover-icon { font-size: 80px; margin-bottom: 10px; }
+
+    .gameover-title {
+      font-size: clamp(24px, 5vw, 40px);
+      font-weight: 800;
+      color: var(--red);
+    }
+
+    .gameover-info {
+      color: rgba(255,255,255,0.7);
+      font-size: 16px;
+      line-height: 1.8;
+    }
+
+    .gameover-info strong { color: var(--gold); }
+
+    .wrong-answer-box {
+      background: rgba(192,57,43,0.1);
+      border: 1px solid rgba(192,57,43,0.3);
+      border-radius: 16px;
+      padding: 20px 30px;
+      max-width: 500px;
+      text-align: left;
+    }
+
+    .wrong-answer-box .label { font-size: 12px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+    .wrong-answer-box .q-text { font-size: 15px; font-weight: 600; margin-bottom: 12px; line-height: 1.5; }
+    .wrong-answer-box .answer-row { font-size: 14px; display: flex; gap: 8px; align-items: center; }
+    .wrong-answer-box .your-ans { color: #FF8F7A; }
+    .wrong-answer-box .right-ans { color: #7DCA94; }
+
+    /* ========== WIN SCREEN ========== */
+    #screen-win {
+      text-align: center;
+      gap: 20px;
+    }
+
+    .win-bells { font-size: 60px; animation: celebrateBells 1s ease-in-out infinite alternate; }
+
+    @keyframes celebrateBells {
+      0% { transform: scale(1) rotate(-10deg); filter: drop-shadow(0 0 10px gold); }
+      100% { transform: scale(1.1) rotate(10deg); filter: drop-shadow(0 0 30px gold); }
+    }
+
+    .win-title {
+      font-size: clamp(28px, 6vw, 52px);
+      font-weight: 800;
+      background: linear-gradient(135deg, #FFD700, #FF8C00, #FFD700);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .win-score {
+      font-size: 48px;
+      font-weight: 800;
+      color: var(--gold);
+    }
+
+    .win-sub { color: rgba(255,255,255,0.6); font-size: 16px; }
+
+    .confetti-wrapper {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 50;
+      overflow: hidden;
+    }
+
+    .confetti-piece {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      top: -20px;
+      animation: fall linear forwards;
+    }
+
+    @keyframes fall {
+      to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+    }
+
+    /* ========== BUTTONS ========== */
+    .btn {
+      padding: 14px 36px;
+      border-radius: 50px;
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, #FFD700, #FF8C00);
+      color: #1a0a00;
+      box-shadow: 0 4px 20px rgba(255,215,0,0.4);
+    }
+
+    .btn-gold:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(255,215,0,0.5);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: rgba(255,255,255,0.7);
+      border: 2px solid rgba(255,255,255,0.2);
+    }
+
+    .btn-outline:hover {
+      border-color: rgba(255,255,255,0.5);
+      color: #fff;
+    }
+
+    .btn-group { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+
+    /* ========== STARS ========== */
+    .stars-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      border-radius: 50%;
+      background: rgba(255,215,0,0.6);
+      animation: twinkle 3s ease-in-out infinite;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.2; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.5); }
+    }
+
+    /* ========== QUESTION IMAGE ========== */
+    .question-image {
+      width: 100%;
+      max-height: 220px;
+      object-fit: contain;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .answer-btn .ans-img {
+      width: 100%;
+      max-height: 120px;
+      object-fit: contain;
+      border-radius: 8px;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .answer-btn.has-img {
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 12px;
+    }
+
+    /* ========== COUNTDOWN TIMER ========== */
+    .countdown-wrap {
+      width: 100%;
+      max-width: 800px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .countdown-ring {
+      position: relative;
+      width: 60px;
+      height: 60px;
+    }
+
+    .countdown-ring svg {
+      transform: rotate(-90deg);
+    }
+
+    .countdown-ring .ring-track {
+      fill: none;
+      stroke: rgba(255,255,255,0.1);
+      stroke-width: 5;
+    }
+
+    .countdown-ring .ring-fill {
+      fill: none;
+      stroke: var(--gold);
+      stroke-width: 5;
+      stroke-linecap: round;
+      stroke-dasharray: 151;
+      stroke-dashoffset: 0;
+      transition: stroke-dashoffset 1s linear, stroke 0.5s;
+    }
+
+    .countdown-ring .ring-fill.warning { stroke: #FF8C00; }
+    .countdown-ring .ring-fill.danger  { stroke: #C0392B; }
+
+    .countdown-num {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--gold);
+    }
+
+    .countdown-num.warning { color: #FF8C00; }
+    .countdown-num.danger  { color: #C0392B; animation: pulse 0.5s infinite; }
+
+    /* ========== MOBILE OPTIMIZATIONS ========== */
+
+    /* Tap highlight & touch feedback */
+    * { -webkit-tap-highlight-color: transparent; }
+
+    .answer-btn, .btn, .mode-card, .speak-btn {
+      -webkit-user-select: none;
+      user-select: none;
+      touch-action: manipulation;
+    }
+
+    /* Responsive adjustments */
+    @media (min-width: 600px) {
+      .answers-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* Small phones (< 400px) */
+    @media (max-width: 400px) {
+      .game-header { padding: 8px 12px; }
+      .question-card { padding: 18px 14px; }
+      .answer-btn { padding: 13px 14px; gap: 10px; }
+      .answer-btn .letter { width: 30px; height: 30px; font-size: 13px; }
+      .btn { padding: 12px 24px; font-size: 14px; }
+      .mode-card { padding: 20px 24px; }
+      .countdown-ring { width: 50px; height: 50px; }
+      .countdown-num { font-size: 15px; }
+    }
+
+    /* Fix game screen scroll on short phones */
+    #screen-game {
+      justify-content: flex-start;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: env(safe-area-inset-bottom, 16px);
+    }
+
+    /* Prevent layout jump when keyboard opens on mobile */
+    @media (max-height: 600px) {
+      .countdown-wrap { margin-bottom: 8px; }
+      .progress-bar { margin-bottom: 10px; }
+      .question-card { margin-bottom: 10px; padding: 14px; }
+      .answers-grid { gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Stars background -->
+<div class="stars-bg" id="stars"></div>
+
+<!-- ===== WELCOME SCREEN ===== -->
+<div class="screen active" id="screen-welcome">
+  <div class="bell-icon">🔔</div>
+  <div>
+    <div class="game-title">Rung Chuông Vàng</div>
+    <div class="game-title" style="font-size: clamp(18px,3vw,28px); margin-top: 4px;">Mầm Non Tuổi Thơ 2026–2027</div>
+  </div>
+  <div class="subtitle">Khối Mẫu Giáo Lớn (5–6 tuổi)</div>
+
+  <div class="mode-cards">
+    <div class="mode-card" onclick="startGame('random')">
+      <div class="mode-icon">🎲</div>
+      <div class="mode-name">Thi Đấu</div>
+      <div class="mode-desc">30 câu ngẫu nhiên<br/>gồm ít nhất 3–4 câu tiếng Anh<br/>Sai là thua ngay!</div>
+    </div>
+    <div class="mode-card" onclick="startGame('review')">
+      <div class="mode-icon">📚</div>
+      <div class="mode-name">Ôn Tập</div>
+      <div class="mode-desc">Toàn bộ câu hỏi theo thứ tự<br/>300 câu tiếng Việt + 31 câu tiếng Anh<br/>Luyện tập không giới hạn</div>
+    </div>
+  </div>
+
+  <div class="subtitle" style="margin-top: 10px;">🔊 Bật âm lượng để nghe đọc câu hỏi tự động</div>
+  <div id="voice-warning" style="display:none; margin-top:12px; background:rgba(192,57,43,0.15); border:1px solid rgba(192,57,43,0.5); border-radius:14px; padding:14px 20px; max-width:480px; text-align:left; font-size:13px; line-height:1.7; color:#FFB3A7;">
+    <b>⚠️ Máy chưa có giọng đọc tiếng Việt</b><br/>
+    Câu hỏi tiếng Việt sẽ không được đọc thành tiếng.<br/>
+    <b>Cách cài trên Windows:</b> Vào <i>Settings → Time &amp; Language → Speech → Add voices</i>, tìm <b>Vietnamese</b> và cài đặt, sau đó <b>mở lại trình duyệt</b>.<br/>
+    <b>Trên Mac:</b> Vào <i>System Settings → Accessibility → Spoken Content → System Voice → Customize</i>, tích chọn tiếng Việt.
+  </div>
+</div>
+
+<!-- ===== GAME SCREEN ===== -->
+<div class="screen" id="screen-game">
+  <div class="game-header">
+    <div class="question-counter">Câu <span id="q-current">1</span> / <span id="q-total">30</span></div>
+    <div id="lang-badge" class="lang-badge vi">TIẾNG VIỆT</div>
+    <div style="font-size:13px; color: rgba(255,215,0,0.7);">✅ <span id="q-correct-count">0</span> đúng</div>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+  </div>
+
+  <div class="countdown-wrap">
+    <div class="countdown-ring">
+      <svg width="60" height="60" viewBox="0 0 60 60">
+        <circle class="ring-track" cx="30" cy="30" r="24"/>
+        <circle class="ring-fill" id="countdown-fill" cx="30" cy="30" r="24"/>
+      </svg>
+      <div class="countdown-num" id="countdown-num">20</div>
+    </div>
+  </div>
+
+  <div class="question-card">
+    <div class="question-num-label" id="q-num-label">Câu hỏi số 1</div>
+    <img id="question-img" class="question-image" src="" alt="" style="display:none"/>
+    <div class="question-text" id="question-text">Đang tải...</div>
+    <button class="speak-btn" id="speak-btn" onclick="speakCurrent()">
+      🔊 <span>Nghe lại</span>
+    </button>
+  </div>
+
+  <div class="answers-grid" id="answers-grid">
+    <button class="answer-btn" id="btn-A" onclick="selectAnswer(0)"><span class="letter">A</span><span class="ans-text"></span></button>
+    <button class="answer-btn" id="btn-B" onclick="selectAnswer(1)"><span class="letter">B</span><span class="ans-text"></span></button>
+    <button class="answer-btn" id="btn-C" onclick="selectAnswer(2)"><span class="letter">C</span><span class="ans-text"></span></button>
+  </div>
+</div>
+
+<!-- ===== RESULT OVERLAY ===== -->
+<div class="result-overlay" id="result-overlay">
+  <div class="result-icon" id="result-icon"></div>
+  <div class="result-title" id="result-title"></div>
+  <div class="result-subtitle" id="result-subtitle"></div>
+</div>
+
+<!-- ===== GAME OVER SCREEN ===== -->
+<div class="screen" id="screen-gameover">
+  <div class="gameover-icon">😢</div>
+  <div class="gameover-title">Chưa được rồi!</div>
+  <div class="gameover-info">
+    Bé đã trả lời đúng <strong id="go-correct">0</strong> câu<br/>
+    trước khi dừng lại ở câu số <strong id="go-qnum">1</strong>
+  </div>
+
+  <div class="wrong-answer-box" id="wrong-box">
+    <div class="label">Câu trả lời sai</div>
+    <div class="q-text" id="go-qtext"></div>
+    <div class="answer-row">
+      <span>Bé chọn:</span>
+      <span class="your-ans" id="go-your-ans"></span>
+    </div>
+    <div class="answer-row" style="margin-top:6px;">
+      <span>Đáp án đúng:</span>
+      <span class="right-ans" id="go-right-ans"></span>
+    </div>
+  </div>
+
+  <div class="btn-group">
+    <button class="btn btn-gold" id="go-retry-btn" onclick="retryGame()">🔄 Thử lại</button>
+    <button class="btn btn-outline" onclick="showScreen('screen-welcome')">🏠 Trang chủ</button>
+  </div>
+</div>
+
+<!-- ===== WIN SCREEN ===== -->
+<div class="screen" id="screen-win">
+  <div class="confetti-wrapper" id="confetti"></div>
+  <div class="win-bells">🔔🏆🔔</div>
+  <div class="win-title">Xuất Sắc!</div>
+  <div class="win-score" id="win-score">30 / 30</div>
+  <div class="win-sub" id="win-sub">Bé đã trả lời đúng tất cả câu hỏi!</div>
+
+  <div class="btn-group">
+    <button class="btn btn-gold" onclick="retryGame()">🔄 Chơi lại</button>
+    <button class="btn btn-outline" onclick="showScreen('screen-welcome')">🏠 Trang chủ</button>
+  </div>
+</div>
+
+
+<script>
+const EMBEDDED_QUESTIONS = {"vietnamese":[{"id":"vn_1","lang":"vi","num":1,"question":"Mùa nào trong năm có hoa đào, hoa mai ?","answers":["Mùa xuân","Mùa hè","Mùa thu"],"correct":0},{"id":"vn_2","lang":"vi","num":2,"question":"Những cuốn sách thường được xếp ở đâu?","answers":["Trong tủ lạnh","Trên giá sách","Trong tủ quần áo"],"correct":1},{"id":"vn_3","lang":"vi","num":3,"question":"Môi trường nào giúp trẻ phát triển tốt?","answers":["Nghiêm khắc","Bỏ mặc","Yêu thương"],"correct":2},{"id":"vn_4","lang":"vi","num":4,"question":"Các khối sau đây khối nào lăn được?","answers":["Khối tam giác","Khối cầu","Khối vuông"],"correct":1},{"id":"vn_5","lang":"vi","num":5,"question":"Ở trường bé ăn sáng lúc mấy giờ?","answers":["Khoảng 8h sáng","11h trưa","7h tối"],"correct":0},{"id":"vn_6","lang":"vi","num":6,"question":"Trẻ phát triển tốt khi được ?","answers":["Ép học","Trải nghiệm","Không làm gì"],"correct":1},{"id":"vn_7","lang":"vi","num":7,"question":"Bé hãy tìm số chẵn để hoàn thành dãy số 2-4-6-….?","answers":["Số 1","Số 8","Số 5"],"correct":1},{"id":"vn_8","lang":"vi","num":8,"question":"Nhóm quả nào sau đây có số lượng nhiều nhất ?","answers":["3 quả táo","5 quả cam","8 quả đào"],"correct":2,"answerImages":["images/8.1.jpg","images/8.2.jpg","images/8.3.jpg"]},{"id":"vn_9","lang":"vi","num":9,"question":"Học qua chơi có tốt không?","answers":["Có","không cần","Không"],"correct":0},{"id":"vn_10","lang":"vi","num":10,"question":"Trẻ cần học kỹ năng gì?","answers":["Chơi điện thoại","Tự phục vụ","Xem tivi"],"correct":1},{"id":"vn_11","lang":"vi","num":11,"question":"Con mèo bắt đầu bằng chữ gì?","answers":["C","B","D"],"correct":0},{"id":"vn_12","lang":"vi","num":12,"question":"Khi con ở nhà và bị ốm con sẽ làm gì?","answers":["Nằm nghỉ cho đến khi hết mệt","Tự lấy thuốc uống","Báo cho bố mẹ và người lớn biết"],"correct":2},{"id":"vn_13","lang":"vi","num":13,"question":"Mưa thường được vẽ bằng nét gì?","answers":["nét xiên","nét cong trái","nét móc 2 đầu"],"correct":0},{"id":"vn_14","lang":"vi","num":14,"question":"Bẽ hãy viết chữ cái còn thiếu vào sau chữ M….. để tạo thành chữ “Mẹ”","answers":["Chữ a","Chữ e","Chữ ô"],"correct":1},{"id":"vn_15","lang":"vi","num":15,"question":"Tổ con có 15 bạn trong đó có 8 bạn nữ hỏi có bao nhiêu bạn nam?","answers":["1 bạn nam","2 bạn nam","7 bạn nam"],"correct":2},{"id":"vn_16","lang":"vi","num":16,"question":"Có 1 chữ cái giống 1 chữ số mà bé đã học, đó là chữ gì?","answers":["Chữ E","Chữ A","Chữ O"],"correct":2},{"id":"vn_17","lang":"vi","num":17,"question":"Dùng 1 nét xiên trái và 1 nét xiên phải có thể tạo thành chữ cái nào?","answers":["Chữ M","Chữ E","Chữ X"],"correct":2},{"id":"vn_18","lang":"vi","num":18,"question":"Trong câu chuyện “Cáo, thỏ và gà trống” có câu: “Ta vác... trên vai Đi tìm cáo gian ác Cáo ở đâu ra ngay ra ngay”","answers":["Hái","Cuốc","Gậy"],"correct":0},{"id":"vn_19","lang":"vi","num":19,"question":"Trong một ngày sau buổi sáng sẽ đến buổi gì?","answers":["Buổi Chiều","Buổi tối","Buổi Trưa"],"correct":2},{"id":"vn_20","lang":"vi","num":20,"question":"Trong chữ “Bố” gồm những chữ cái nào ?","answers":["B và ô","B và a","B và ơ"],"correct":0},{"id":"vn_21","lang":"vi","num":21,"question":"Khi qua đường con phải làm gì?","answers":["Chạy thẳng qua đường","Quan sát phía trước,phía sau","Quan sát phía trước,phía sau và nhờ người lớn dẫn qua"],"correct":2},{"id":"vn_22","lang":"vi","num":22,"question":"Sau cơn mưa sẽ xuất hiện , hiện tượng gì?","answers":["Sấm sét","Nắng","Cầu vồng"],"correct":2},{"id":"vn_24","lang":"vi","num":24,"question":"Trong trò chơi “Chuyền bóng” được chuyển mấy quả bóng 1 lúc?","answers":["Một quả bóng","Hai quả bóng","Ba quả bóng"],"correct":0},{"id":"vn_25","lang":"vi","num":25,"question":"Trong toán học, chuỗi hạt màu hồng xanh vàng, hồng xanh vàng, hồng xanh vàng là quy tắc gì?","answers":["Quy tắc 2:2","Chuỗi 1:1","Chuỗi 1:1:1"],"correct":2},{"id":"vn_26","lang":"vi","num":26,"question":"Trong hoạt động với bảng 100 có các chữ số từ 1 đến bao nhiêu ?","answers":["Đến 50","Đến 70","Đến 100"],"correct":2},{"id":"vn_27","lang":"vi","num":27,"question":"Biển báo giao thông có hình tam giác màu vàng và viền màu đỏ tượng trug cho loại biển báo nào?","answers":["Biển báo nguy hiểm","Biển báo chỉ dẫn","Biển báo cấm"],"correct":0},{"id":"vn_28","lang":"vi","num":28,"question":"Con vật nào sau đây vừa sống ở dưới nước, vừa sống ở trên cạn?","answers":["Con cá mập","Con ếch","Con cá voi"],"correct":1},{"id":"vn_29","lang":"vi","num":29,"question":"Khi con nhìn thấy hành động xả rác trên đường con sẽ làm gì?","answers":["Đi qua","Nhặt bỏ vào thùng rác","Gọi người khác nhặt"],"correct":1,"image":"images/29.jpg"},{"id":"vn_30","lang":"vi","num":30,"question":"Quy tắc sắp xếp nào dưới đây đúng theo quy tắc 2- 1","answers":["Phương án A","Phương án B","Phương án C"],"correct":0,"answerImages":["images/30.a.jpg","images/30.b.jpg","images/30.c.jpg"]},{"id":"vn_31","lang":"vi","num":31,"question":"Cùng lắng nghe một đoạn nhạc “ nhạc không lời bài anh phi công ơi” bé hãy cho biết tên của bài hát?","answers":["Anh phi công ơi","Em đi chơi thuyền","Em đi qua ngã tư đường phố"],"correct":0},{"id":"vn_32","lang":"vi","num":32,"question":"Cách nào đúng khi chia 10 đối tượng ra làm 2 phần?","answers":["4 và 5","6 và 4","1 và 5"],"correct":1},{"id":"vn_33","lang":"vi","num":33,"question":"Đố bé biết chất đạm có nhiều trong thực phẩm nào dưới đây?","answers":["Thịt, cá, trứng, sữa","Đậu, lạc, vừng","Rau, củ, quả"],"correct":0},{"id":"vn_34","lang":"vi","num":34,"question":"Mặt trời mọc vào buổi gì?","answers":["Buổi tối","Buổi sáng","Buổi trưa"],"correct":1},{"id":"vn_35","lang":"vi","num":35,"question":"Máy bay là phương tiện giao thông đường gì?","answers":["Đường bộ","Đường thủy","Đường hàng không"],"correct":2},{"id":"vn_36","lang":"vi","num":36,"question":"Tổ con có 10 bạn trong đó có 4 bạn nữ hỏi có bao nhiêu bạn nam?","answers":["3 bạn nam","6 bạn nam","1 bạn nam"],"correct":1},{"id":"vn_37","lang":"vi","num":37,"question":"Con vật nào bò ngang?","answers":["Con tôm","Con cua","Con cá"],"correct":1},{"id":"vn_38","lang":"vi","num":38,"question":"Hãy sắp xếp vòng đời của loài ếch ?","answers":["Trứng – Nòng nọc – Phôi - Ếch","Phôi - Ấu Trùng – Nòng nọc - Ếch con - Ếch Trưởng thành – Trứng","Trứng - Phôi - Ấu Trùng – Nòng nọc 2 chân – Nòng nọc 4 chân - Ếch con - Ếch Trưởng thành"],"correct":2},{"id":"vn_39","lang":"vi","num":39,"question":"Mặt trăng xuất hiện khi nào?","answers":["Sáng","Trưa","Tối"],"correct":2},{"id":"vn_40","lang":"vi","num":40,"question":"Cần bao nhiêu que diêm để được 1 hình vuông?","answers":["4 que diêm","6 que diêm","9 que diêm"],"correct":0},{"id":"vn_41","lang":"vi","num":41,"question":"Cây cần gì để sống?","answers":["Đất","Nước","Cả 2 đáp án trên"],"correct":2},{"id":"vn_42","lang":"vi","num":42,"question":"Vịnh nào phong cảnh hữu tình, Kỳ quan thế giới đã bình chọn ra?","answers":["Lăng Bác","Vịnh Hạ Long","Hồ Gươm"],"correct":1},{"id":"vn_43","lang":"vi","num":43,"question":"Bé hãy chọn đáp án đúng để điền vào dấu ba chấm trong câu ca dao sau Công cha như núi thái sơn Nghĩa mẹ như …. trong nguồn chảy ra.","answers":["Đá","Cát","Nước"],"correct":2},{"id":"vn_44","lang":"vi","num":44,"question":"Khối nào sau đây lăn được?","answers":["Khối Cầu","Khối Hộp Chữ Nhật","Hình chữ nhật"],"correct":0},{"id":"vn_45","lang":"vi","num":45,"question":"Bức tranh nào sau đây nằm trong câu chuyện nào?","answers":["Cáo, Thỏ và Gà Trống","Nhổ củ cải","Kiến con đi ô tô"],"correct":1,"image":"images/45.jpg"},{"id":"vn_46","lang":"vi","num":46,"question":"Phương tiện nào dưới đây được ưu tiên khi tham gia giao thông?","answers":["Xe cứu hỏa","Xe cấp cứu","Cả 2 phương án trên"],"correct":2},{"id":"vn_47","lang":"vi","num":47,"question":"Bề mặt da trên cơ thể người là cơ quan?","answers":["Khứu giác","Xúc giác","Vị giác"],"correct":1},{"id":"vn_48","lang":"vi","num":48,"question":"Sau khi rủa tay xong con thấy bạn Bin vẫn để vòi nước chảy. Trong trường hợp này con sẽ làm gì? Đến tắt vòi nước, nhắc bạn Bin lần sau nhớ tắt nước sau khi dùng Cứ để vòi nước chảy rồi đi vào lớp Rủ bạn Bin cùng ra nghịch nước Đáp án: A 49. Môi trường sống của con chim ở đâu? Trên cạn Trên không Dưới nước Đáp án : B 50. Hình chữ nhật có mấy cạnh?","answers":["2 cạnh","3 cạnh","4 cạnh"],"correct":2},{"id":"vn_51","lang":"vi","num":51,"question":"Cùng lắng nghe câu đố sau: “ Lửa reo rừng rực cháy to, Họ lao vào dập chẳng lo thân mình. Mặc đồ đỏ, đội mũ xinh, Cứu người, cứu lửa – nghĩa tình bao la Đố bé là nghề gì?","answers":["Bác Sĩ","Công An","Lính Cứu Hỏa"],"correct":2},{"id":"vn_52","lang":"vi","num":52,"question":"Trong các dãy số sau đây dãy số nào được sắp xếp từ bé đến lớn?","answers":["1, 3, 4, 6, 7, 5, 9, 2, 8","1, 2, 3, 4, 5, 6, 7, 8, 9","4, 3, 2, 5, 8, 1, 0, 5, 9"],"correct":1},{"id":"vn_53","lang":"vi","num":53,"question":"Hiện tượng nào sau đây gọi là hiện tượng tự nhiên?","answers":["Hiện tượng trứng nổi trứng chìm","Hiện tượng mưa, nắng","Hiện tượng Bóng bay"],"correct":1},{"id":"vn_54","lang":"vi","num":54,"question":"Hàm răng của bé khi chưa thay được gọi là gì?","answers":["Răng sữa","Răng sâu","Răng vĩnh cửu"],"correct":0},{"id":"vn_55","lang":"vi","num":55,"question":"Hãy cho biết câu hát sau thuộc trong bài hát nào? Em rất thích trồng nhiều cây xanh Cho con chi nhảy nhót trên cành","answers":["Lý cây xanh","Lý cây Bông","Em yêu cây xanh"],"correct":2},{"id":"vn_56","lang":"vi","num":56,"question":"Nghề nào dưới đây tạo ra sản phẩm là cây lúa","answers":["Nghề nông","Nghề giáo viên","Nghề xây dựng"],"correct":0},{"id":"vn_57","lang":"vi","num":57,"question":"Câu chuyện nào dưới đây kể về 1 cô bé mang bánh đến cho bà?","answers":["Ba anh em","Cây tre trăm đốt","Cô bé quàng khăn đỏ"],"correct":2},{"id":"vn_58","lang":"vi","num":58,"question":"Khi phát hiện có cháy .Bé cần làm gì?","answers":["Lại chỗ cháy","Không làm gì cả","Kêu cứu, gọi người lớn giúp đỡ và gọi 114"],"correct":2},{"id":"vn_59","lang":"vi","num":59,"question":"Câu sau nói về bài thơ gì? Buổi sáng bé chào mẹ Chạy tới ôm cổ cô Buổi chiều bé chào cô Rồi sà vào lòng mẹ","answers":["Yêu mẹ","Cô và mẹ","Lời chào"],"correct":1},{"id":"vn_60","lang":"vi","num":60,"question":"Câu đố sau nói về nghề gì? Nghề gì cần đến đục cưa Làm ra giường tủ Sơm trưa bé cần","answers":["Thợ mộc","Thợ mỏ","Thợ xây"],"correct":0},{"id":"vn_61","lang":"vi","num":61,"question":"Con hãy chọn đáp án đúng cho câu đố sau. Tết nào có cốm, có hồng. Có thị, có bưởi, đèn lồng, ông sao?","answers":["Tết Nguyên Đán","Tết Hàn Thực","Tết Trung Thu"],"correct":2},{"id":"vn_62","lang":"vi","num":62,"question":"Con hãy chọn đáp án đúng cho câu đố sau.? Trên trời lơ lửng Trắng xốp như bông","answers":["Mây","Bông","Đất"],"correct":0},{"id":"vn_63","lang":"vi","num":63,"question":"Câu đố sau nói về quả gì? Quả xanh ruột đỏ Hạt đen li ti","answers":["Quả chuối","Quả nho","Quả dưa hấu"],"correct":2},{"id":"vn_64","lang":"vi","num":64,"question":"Vật nào dưới đây không tan được trong nước?","answers":["Muối","Đường","Sỏi"],"correct":2},{"id":"vn_65","lang":"vi","num":65,"question":"Bác thợ xây cần dùng đến vật dụng nào dưới đây?","answers":["Bai","Kim tiêm","Nhiệt kế"],"correct":0},{"id":"vn_66","lang":"vi","num":66,"question":"Đồ vật nào dưới đây nổi trên mặt nước?","answers":["Viên sỏi","Cục đá","Miếng xốp"],"correct":2},{"id":"vn_67","lang":"vi","num":67,"question":"Ba chú heo xây mấy ngôi nhà?","answers":["2","3","4"],"correct":1},{"id":"vn_68","lang":"vi","num":68,"question":"Khi gặp Tín hiệu đèn giao thông màu xanh báo hiệu chúng ta điều gì?","answers":["Dừng lại","Được phép đi","Đi chậm lại"],"correct":1},{"id":"vn_69","lang":"vi","num":69,"question":"Lá cờ của nước ta gồm có những màu sắc gì?","answers":["Xanh và đỏ","Đỏ và vàng","Cam và vàng"],"correct":1},{"id":"vn_70","lang":"vi","num":70,"question":"Các con Cần làm điều gì để bảo vệ răng?","answers":["Ăn kẹo trước khi đi ngủ","Không đánh răng","Đánh răng trước khi ngủ và sau khi ngủ dậy"],"correct":2},{"id":"vn_71","lang":"vi","num":71,"question":"Khi đi bộ trên đường em cần đi như thế nào cho đúng?","answers":["Đi giữa lòng đường","Đi bên lề đường bên trái","Đi bên lề đường bên phải"],"correct":2},{"id":"vn_72","lang":"vi","num":72,"question":"Cây nào dưới đây sống ở trên cạn?","answers":["Cây hoa sen","Hoa rong biển","Cây ngô"],"correct":2},{"id":"vn_73","lang":"vi","num":73,"question":"Bé hãy hoàn thành phép tính sau. 10 +…..= 18","answers":["5","6","8"],"correct":2},{"id":"vn_74","lang":"vi","num":74,"question":"Số điện thoại nào là số gọi cảnh sát?","answers":["113","114","115"],"correct":0},{"id":"vn_75","lang":"vi","num":75,"question":"Đồng hồ sau đây đang chỉ vào mấy giờ?","answers":["3 giờ","6 giờ","9 giờ"],"correct":1,"image":"images/75.jpg"},{"id":"vn_76","lang":"vi","num":76,"question":"Hôm nay là thứ 7 vậy ngày hôm qua là thứ mấy?","answers":["Thứ 3","Thứ 4","Thứ 6"],"correct":2},{"id":"vn_77","lang":"vi","num":77,"question":"Nước Việt Nam có thủ đô nằm ở đâu?","answers":["Hà Nội","Hồ Chí Minh","Nghệ An"],"correct":0},{"id":"vn_78","lang":"vi","num":78,"question":"hãy điền dấu <,>,= để hoàn thành phép tính sau: 9 □ 9","answers":["Dấu “ =”","Dấu “ <”","Dấu “ >”"],"correct":0},{"id":"vn_79","lang":"vi","num":79,"question":"Ngày nhà giáo Việt Nam là ngày nào?","answers":["20/11","8/3","20/10"],"correct":0},{"id":"vn_80","lang":"vi","num":80,"question":"Ngày 8/3 là ngày dành cho ai?","answers":["Ngày dành cho Bố và Ông","Ngày dành cho Bà và Mẹ","Ngày dành cho các em thiếu nhi"],"correct":1},{"id":"vn_81","lang":"vi","num":81,"question":"Nước Việt Nam có hình chữ gì?","answers":["Chữ S","Chữ C","Chữ X"],"correct":0},{"id":"vn_82","lang":"vi","num":82,"question":"Cô bé quàng khăn đỏ nên làm gì?","answers":["Đi theo người lạ","Nghe lời mẹ","Đi chơi"],"correct":1},{"id":"vn_83","lang":"vi","num":83,"question":"Khi chúc mừng sinh nhật bạn các con thường hát bài hát nào?","answers":["Happy Birthday to you","Happy New Year","Head Shoulders"],"correct":0},{"id":"vn_84","lang":"vi","num":84,"question":"Khi chơi với đồ chơi ngoài trời, các con cần làm gì để đảm bảo an toàn?","answers":["Có thể tự do chạy nhảy, đùa nghịch","Chơi cẩn thận, không đùa nghịch và xô đẩy bạn","Thích rủ bạn đánh nhau"],"correct":1},{"id":"vn_85","lang":"vi","num":85,"question":"Các thẻ từ sau đây : “Nắng , mưa, gió , bão, nước, mặt trời” thuộc chủ đề gì?","answers":["Chủ đề Nước và các hiện tượng tự nhiên","Chủ đề Phương tiện giao thông","Chủ đề Trường mầm non"],"correct":0},{"id":"vn_86","lang":"vi","num":86,"question":"Đèn tín hiệu giao thông màu đỏ báo hiệu điều gì?","answers":["Dừng lại","Được đi","Đi chậm lại"],"correct":0},{"id":"vn_87","lang":"vi","num":87,"question":"Điền số vào dãy số sau sao cho đúng thứ tự từ Bé đến lớn: 1,2,3,4, 5 , .. ,..8 , …. , ….","answers":["6, 7, 9 , 10","6 ,5 , 1 , 4","4,5, 6 , 1"],"correct":0},{"id":"vn_88","lang":"vi","num":88,"question":"Bé hãy hoàn thành phép tính sau: 10 + 1=…..","answers":["15","16","11"],"correct":2},{"id":"vn_89","lang":"vi","num":89,"question":"Ngôi trường bé đang học có tên là gì?","answers":["Mầm non Tuổi Thơ","Mầm non Tuổi Ngọc","Mầm non Tuổi Hồng"],"correct":0},{"id":"vn_90","lang":"vi","num":90,"question":"Con vật nào sau đây thuộc nhóm động vật trong nhà?","answers":["Cá, tôm, cua","Chó, mèo, gà","Hổ,sư tử,báo"],"correct":1},{"id":"vn_91","lang":"vi","num":91,"question":"Con vật nào sau đây thuộc nhóm côn trùng?","answers":["Con chim bồ câu","Con gà","Con chuồn chuồn"],"correct":2},{"id":"vn_92","lang":"vi","num":92,"question":"Trong các loại quả sau, loại quả nào chứa nhiều Vitamin C nhất?","answers":["Quả trứng","Quả bóng","Quả cam"],"correct":2},{"id":"vn_93","lang":"vi","num":93,"question":"Khi cây bị khô héo bé nên làm gì?","answers":["Để cây dưới trời nắng","Tưới nước cho cây","Không tưới nước cho cây"],"correct":1},{"id":"vn_94","lang":"vi","num":94,"question":"Trồng cây xanh có lợi ích gì?","answers":["Tỏa bóng mát làm sạch không khí","Lấy hoa, lấy quả","Cả 2 đáp án trên"],"correct":2},{"id":"vn_95","lang":"vi","num":95,"question":"Loại bánh nào tượng trưng cho ngày Tết?","answers":["Bánh Chưng","Bánh Dẻo","Bánh Trung thu"],"correct":0},{"id":"vn_96","lang":"vi","num":96,"question":"Loại hoa nào là đặc trưng cho Tết?","answers":["Hoa Ban","Hoa Đào, hoa Mai","Hoa Phượng"],"correct":1},{"id":"vn_97","lang":"vi","num":97,"question":"Khi được lì xì ngày Tết bé nên nói gì?","answers":["Con cảm ơn ạ","Con xin lỗi ạ","Không nói gì"],"correct":0},{"id":"vn_98","lang":"vi","num":98,"question":"Ở trường ai nấu ăn ngon. Cho con sức khỏe lớn khôn từng ngày?","answers":["Cô giáo","Cô cấp dưỡng","Cô lao công"],"correct":1},{"id":"vn_99","lang":"vi","num":99,"question":"Màu xanh với màu vàng tạo ra màu gi?","answers":["Màu cam","Màu hồng","Màu xanh lá"],"correct":2},{"id":"vn_100","lang":"vi","num":100,"question":"Khi bạn sai,con nên làm gì","answers":["Giúp bạn","Cười","Bỏ đi"],"correct":0},{"id":"vn_101","lang":"vi","num":101,"question":"Hình có hai cạnh dài bằng nhau, hai cạnh ngắn bằng nhau?","answers":["Hình chữ nhật","Hình vuông","Hình tam giác"],"correct":0},{"id":"vn_102","lang":"vi","num":102,"question":"Số đứng liền trước số 5 là số gì?","answers":["Số 4","Số 5","Số 6"],"correct":0},{"id":"vn_103","lang":"vi","num":103,"question":"Số đứng liền sau số 7 là số gì?","answers":["Số 8","Số 9","Số 10"],"correct":0},{"id":"vn_104","lang":"vi","num":104,"question":"“Mùa gì bé đón trăng rằm. Rước đèn phá cỗ chị Hằng cùng vui” là mùa nào?","answers":["Mùa xuân","Mùa thu","Mùa hè"],"correct":1},{"id":"vn_105","lang":"vi","num":105,"question":"Mùa đông giá lạnh bé nên mặc áo gì?","answers":["Áo phông ngắn tay","Áo len","Áo sơ mi"],"correct":1},{"id":"vn_106","lang":"vi","num":106,"question":"Ngày nào là ngày quốc tế thiếu nhi?","answers":["Ngày 30 tháng 4","Ngày mùng 1 tháng 6","Ngày mùng 2 tháng 9"],"correct":1},{"id":"vn_107","lang":"vi","num":107,"question":"Trong một tuần, sau ngày thứ 3 là thứ mấy?","answers":["Ngày thứ 2","Ngày thứ 4","Ngày thứ 5"],"correct":1},{"id":"vn_108","lang":"vi","num":108,"question":"Trò chơi “Kéo cưa lừa xẻ có bao nhiêu bạn chơi”?","answers":["Có 2 bạn chơi","Có 9 bạn chơi","Có 4 bạn chơi"],"correct":0},{"id":"vn_109","lang":"vi","num":109,"question":"Bangkok là thủ đô của quốc gia nào ?","answers":["Campuchia","Lào","Thái Lan"],"correct":2},{"id":"vn_110","lang":"vi","num":110,"question":"Khi đi trời nắng bé phải làm gì?","answers":["Mặc áo chống nắng, đội mũ","Mặc áo chống nắng, che ô","Cả 2 đáp án"],"correct":2},{"id":"vn_111","lang":"vi","num":111,"question":"Điền từ còn thiếu trong câu ca dao sau: “... Bay thấp thì mưa, bay cao thì nắng, bay vừa thì râm”","answers":["Con kiến","Con ong","Con chuồn chuồn"],"correct":2},{"id":"vn_112","lang":"vi","num":112,"question":"Trong câu truyện “Giọt nước tí xíu”, ban đầu giọt nước ở đâu","answers":["ở Trên trời","Ở biển,","ở đám mây"],"correct":1},{"id":"vn_113","lang":"vi","num":113,"question":"Câu đố: Ban đêm tỏa sáng Tròn tròn trên trời Là gì?","answers":["Mặt trời","Mặt trăng","Đám may"],"correct":1},{"id":"vn_114","lang":"vi","num":114,"question":"Con vật nào gây ra bệnh sốt xuất huyết?","answers":["Con kiến","Con ong","Con muỗi vằn"],"correct":2},{"id":"vn_115","lang":"vi","num":115,"question":"Để môi trường sạch sẽ con sẽ làm gì?","answers":["Bỏ rác đúng nơi quy định","Vứt rác bừa bãi","Vứt rác ra lòng đường"],"correct":0},{"id":"vn_116","lang":"vi","num":116,"question":"“Tôi là một nét thẳng. Có dấu chấm ở trên. Bé hãy thử đoán xem. Chữ cái gì bé nhỉ?”","answers":["Chữ y","Chữ i","Chữ â"],"correct":1},{"id":"vn_117","lang":"vi","num":117,"question":"Khi thực hiện động tác VĐCB “Trườn sấp” con hãy lựa chọn đáp án đúng:","answers":["Người áp sát đất, trườn tay nọ chân kia, khi trườn về phía trước không nhổm mông","Người áp sát đất, trườn cùng tay và cùng chân, khi trườn về phía trước nhấc cao mông","Người áp sát đất, khi trườn về phía trước không nhổm mông"],"correct":0},{"id":"vn_118","lang":"vi","num":118,"question":"Cơ Sở mầm non Tuổi Thơ quy định mặc đồng phục vào những ngày nào trong tuần?","answers":["Thứ 2 thứ 3 và thứ 5","Thứ 2 thứ 4 và thứ 5","Thứ 2 thứ 4 và thứ 6"],"correct":2},{"id":"vn_119","lang":"vi","num":119,"question":"Người lái máy bay được gọi là gì?","answers":["Công nhân","Phi công","Tài xế"],"correct":1},{"id":"vn_120","lang":"vi","num":120,"question":"“Mình tròn như quả trứng gà Không chân,không tay đó là chữ gì?","answers":["Chữ ô","Chữ o,","Chữ ơ"],"correct":1},{"id":"vn_121","lang":"vi","num":121,"question":"Khi học hết lớp mẫu giáo các bé sẽ lên lớp mấy?","answers":["Lớp 6","Lớp 1","Lớp 5"],"correct":1},{"id":"vn_122","lang":"vi","num":122,"question":"Ai là người đứng chỉ đường ở ngã tư đường phố cho xe qua lại?","answers":["Công an giao thông","Công an cảnh sát kinh tế","Công an cảnh sát phòng cháy chữa cháy"],"correct":0},{"id":"vn_123","lang":"vi","num":123,"question":"Sân ga, đường sắt là nơi hoạt động của PTGT nào?","answers":["Tàu hỏa","Máy bay","Ô tô"],"correct":0},{"id":"vn_124","lang":"vi","num":124,"question":"Con có 8 quả táo,con cho bạn 3 quả hỏi con còn bao nhiêu quả táo ?","answers":["4","5","6"],"correct":1},{"id":"vn_125","lang":"vi","num":125,"question":"Hãy trả lời câu hỏi sau : 1 cộng bao nhiêu để bằng 8 ?","answers":["5","8","9"],"correct":2},{"id":"vn_126","lang":"vi","num":126,"question":"Em đang làm việc nhà giúp mẹ thì có bạn đến rủ đi chơi, em sẽ làm gì?","answers":["Em nhờ mẹ làm giúp rồi đi chơi với bạn","Bỏ việc không làm nữa và đi chơi với bạn","Bảo bạn đợi, làm xong việc rồi đi chơi với bạn"],"correct":2},{"id":"vn_127","lang":"vi","num":127,"question":"Cái gì một cặp song sinh Long lanh, sáng tỏ để nhìn xung quanh?","answers":["Cái mũi","Cái Tay","Đôi mắt"],"correct":2},{"id":"vn_128","lang":"vi","num":128,"question":"Chữ P có trong từ nào sau đây ?","answers":["Viên Phấn","Anh chị","Bánh Quy"],"correct":0},{"id":"vn_129","lang":"vi","num":129,"question":"Tìm đáp án đúng","answers":["Đáp án B","Đáp án D","Đáp án C"],"correct":2,"image":"images/129.jpg"},{"id":"vn_130","lang":"vi","num":130,"question":"Tìm số lớn nhất trong dãy số sau: 10, 14, 16, 13, 18, 20","answers":["16","20","13"],"correct":1},{"id":"vn_131","lang":"vi","num":131,"question":"Tìm số lớn nhất trong dãy số sau: 17, 7, 19,15, 3, 18,20","answers":["20","17","19"],"correct":0},{"id":"vn_132","lang":"vi","num":132,"question":"Tìm trong dãy số xem có số nào giống nhau: 17, 2, 16, 12, 17, 20, 6","answers":["2","17","20"],"correct":1},{"id":"vn_133","lang":"vi","num":133,"question":"Câu đố: Chữ gì có nét móc câu Đứng đầu từ quả rất lâu Đó là chữ gì?","answers":["Chữ P","Chữ q","Chữ d"],"correct":1},{"id":"vn_134","lang":"vi","num":134,"question":"Ngày 30/4 là ngày gì?","answers":["Ngày giải phóng Miền Nam thống nhất đất nước","Ngày Thầy thuốc Việt Nam","Ngày Thành lập Quân đội nhân dân Việt Nam"],"correct":0},{"id":"vn_135","lang":"vi","num":135,"question":"Bản tin chiến thắng ngày 30/4/1975 vào lúc mấy giờ?","answers":["Đúng 12h30 phút","Đúng 11h30 phút","Đúng 10h30 phút"],"correct":1},{"id":"vn_136","lang":"vi","num":136,"question":"Ngày Thầy thuốc Việt Nam là ngày nào?","answers":["Ngày 27/2","Ngày 27/4","Ngày 27/7"],"correct":0},{"id":"vn_137","lang":"vi","num":137,"question":"Một tuần có mấy ngày?","answers":["6 ngày","7 ngày","8 ngày"],"correct":1},{"id":"vn_138","lang":"vi","num":138,"question":"Tại Mần non Tuổi Thơ ngày nào trong tuần bé được nghỉ học?","answers":["Thứ 7","Thứ 7 và Chủ nhật","Ngày Chủ nhật"],"correct":2},{"id":"vn_139","lang":"vi","num":139,"question":"Sinh nhật của Bác Hồ vào ngày, tháng , năm nào?","answers":["19/5 /1890","15/9/ 1980","15/8/1890"],"correct":0},{"id":"vn_140","lang":"vi","num":140,"question":"Đo độ dài của 1 vật chúng ta cần dùng đến cái gì?","answers":["Cái bút","Cái thước","Cái ghế"],"correct":1},{"id":"vn_141","lang":"vi","num":141,"question":"Trong từ “ Tuổi Thơ ” Có bao nhiêu chữ cái?","answers":["7 chữ cái","9 chữ cái","10 chữ cái"],"correct":0},{"id":"vn_142","lang":"vi","num":142,"question":"Khối vuông có bao nhiêu mặt phẳng?","answers":["Có 4 mặt phẳng đều là hình vuông","Có 5 mặt phẳng đều là hình vuông","Có 6 mặt phẳng đều là hình vuông"],"correct":2},{"id":"vn_143","lang":"vi","num":143,"question":"Giữa trưa nhà mình bị cúp điện thì cần thắp cái gì để có ánh sáng?","answers":["Thắp nến","Bật quạt","Không cần bật gì vì giữa trưa trời vẫn sáng"],"correct":2},{"id":"vn_144","lang":"vi","num":144,"question":"Trong từ “ Con yêu bố mẹ” có mấy chữ o?","answers":["Có 2 chữ O","Có 1 chữ O","Có 3 chữ O"],"correct":1},{"id":"vn_145","lang":"vi","num":145,"question":"Bác sĩ nha khoa là bác sĩ chăm sóc cái gì cho các con?","answers":["Chăm sóc mắt","Chăm sóc tai mũi họng","Chăm sóc răng"],"correct":2},{"id":"vn_146","lang":"vi","num":146,"question":"Quốc ca của nước Việt Nam có tên là gì?","answers":["Tiến quân ca","Ai yêu Bác Hồ","Khúc hành quân"],"correct":0},{"id":"vn_147","lang":"vi","num":147,"question":"Màu vàng pha với màu đỏ sẽ thành màu gì?","answers":["Thành màu cam","Thành màu tím","Thành màu hồng"],"correct":0},{"id":"vn_148","lang":"vi","num":148,"question":"Pha màu gì để có được màu xanh lá?","answers":["Màu vàng + màu xanh dương","Màu vàng + màu đỏ","Màu vàng + màu cam"],"correct":0},{"id":"vn_149","lang":"vi","num":149,"question":"Bạn Hồng có 8 bông hoa cô tặng thêm cho bạn Hồng 3 bông hoa. Hỏi bạn Hồng có tất cả bao nhiêu bông hoa?","answers":["Có 11 bông hoa","Có 9 bông hoa","Có 10 bông hoa"],"correct":0},{"id":"vn_150","lang":"vi","num":150,"question":"Có mấy cách chia đối tượng 6 ra làm 2 phần?","answers":["Có 2 cách","Có 3 cách","Có 4 cách"],"correct":1},{"id":"vn_151","lang":"vi","num":151,"question":"Bạn Gấu có 10 cái kẹo mút, bạn Gấu cho bạn Bông 3 cái kẹo mút. Hỏi bạn Gấu còn bao nhiêu cái kẹo mút?","answers":["Còn 7 cái kẹo mút","Còn 8 cái kẹo mút","Còn 9 cái kẹo mút"],"correct":0},{"id":"vn_152","lang":"vi","num":152,"question":"Các con làm gì để phòng tránh tai nạn đuối nước?","answers":["Chơi gần khu vực có nước như sông hồ ao suối","Rủ bạn đi tắm đi bơi","Không chơi gần khu vực có nước như sông hồ ao suốt"],"correct":2},{"id":"vn_153","lang":"vi","num":153,"question":"Một năm có mấy mùa trong năm?","answers":["Có 4 mùa","Có 3 mùa","Có 5 mùa"],"correct":0},{"id":"vn_154","lang":"vi","num":154,"question":"Đâu là tên gọi các mùa trong năm?","answers":["Mùa mưa, mùa bão, mùa nắng","Mùa Xuân, Mùa Hạ, Mùa Thu, Mùa Đông","Mùa hè, mùa mưa, mùa lạnh"],"correct":1},{"id":"vn_155","lang":"vi","num":155,"question":"Mùa Đông thời tiết như thế nào?","answers":["Thời tiết có nắng nóng","Thời tiết có mưa dông","Thời tiết có gió lạnh"],"correct":2},{"id":"vn_156","lang":"vi","num":156,"question":"Một ngày có mấy giờ?","answers":["23 giờ","22 giờ","24 giờ"],"correct":2},{"id":"vn_157","lang":"vi","num":157,"question":"Một giờ có mấy phút?","answers":["50 phút","60 phút","40 phút"],"correct":1},{"id":"vn_158","lang":"vi","num":158,"question":"Một phút có bao nhiêu giây?","answers":["30 giây","40 giây","60 giây"],"correct":2},{"id":"vn_159","lang":"vi","num":159,"question":"Trái tim nằm ở phía nào của cơ thể ?","answers":["Nằm bên trái","Nằm ở giữa","Nằm bên phải"],"correct":0},{"id":"vn_160","lang":"vi","num":160,"question":"Hãy chọn số tiếp theo trong dãy số sau: 1,3,5,7,…","answers":["số 8","số 9","số 10"],"correct":1},{"id":"vn_161","lang":"vi","num":161,"question":"Hãy chọn số tiếp theo trong dãy số sau: 0,2,4,6,…","answers":["số 7","số 8","số 9"],"correct":1},{"id":"vn_162","lang":"vi","num":162,"question":"Khi con bị thương cô giáo dùng gì để dán vết thương?","answers":["Dùng băng keo trong","Dùng tấm vải","Dùng băng Garo y tế"],"correct":2},{"id":"vn_163","lang":"vi","num":163,"question":"Ngày nhà giáo Việt Nam là ngày nào?","answers":["20/10","20/11","20/12"],"correct":1},{"id":"vn_164","lang":"vi","num":164,"question":"Ngày phụ nữ Việt Nam là ngày nào?","answers":["20/10","20/11","20/12"],"correct":0},{"id":"vn_165","lang":"vi","num":165,"question":"Ngày quốc tế phụ nữ là ngày nào?","answers":["8/8","8/3","8/4"],"correct":1},{"id":"vn_166","lang":"vi","num":166,"question":"Ngày lễ gì sẽ có Ông già Noel và cây thông?","answers":["Ngày lễ Giáng sinh","Ngày lễ Trung thu","Ngày lễ Tết cổ truyền"],"correct":0},{"id":"vn_167","lang":"vi","num":167,"question":"Ngày lễ Giáng sinh là ngày mấy?","answers":["25/11","25/10","25/12"],"correct":2},{"id":"vn_168","lang":"vi","num":168,"question":"Hình tam giác có mấy cạnh?","answers":["Có 3 cạnh","Có 4 cạnh","Có 5 cạnh"],"correct":0},{"id":"vn_169","lang":"vi","num":169,"question":"Hình nào còn thiếu trong dấu hỏi?","answers":["Hình C","Hình A","Hình D"],"correct":2,"image":"images/169.jpg"},{"id":"vn_170","lang":"vi","num":170,"question":"Cầu vồng có mấy màu?","answers":["5 màu","6 màu","7 màu"],"correct":2},{"id":"vn_171","lang":"vi","num":171,"question":"Quả gì không dùng để ăn mà dùng để đá để lăn để chuyền?","answers":["Quả Bóng","Quả Táo","Quả Khế"],"correct":0},{"id":"vn_172","lang":"vi","num":172,"question":"Trong thí nghiệm: “Quả cam nổi quả cam chìm”. Làm gì để quả cam chìm xuống nước?","answers":["Ngâm với đường","Bóc vỏ cam ra","Bỏ cam nhẹ nhàng"],"correct":1},{"id":"vn_173","lang":"vi","num":173,"question":"Vào dịp Tết Hàn thực bé cùng cô giáo làm bánh gì?","answers":["Bánh Trung thu","Bánh trôi nước","Bánh Chưng"],"correct":1},{"id":"vn_174","lang":"vi","num":174,"question":"Hãy điền chữ cái còn thiếu để tạo thành chữ Ông : “ Ô…g”","answers":["Chữ N","Chữ E","Chữ V"],"correct":0},{"id":"vn_175","lang":"vi","num":175,"question":"Từ nào dưới đây không có chữ “ G”","answers":["Gà","Gấu","Vịt"],"correct":2},{"id":"vn_176","lang":"vi","num":176,"question":"Từ nào dưới đây có chữ “ R”","answers":["Xăng","Răng","Sáng"],"correct":1},{"id":"vn_177","lang":"vi","num":177,"question":"Từ “ BỐ” Sử dụng dấu thanh gì?","answers":["Dấu sắc","Dấu ngã","Dấu huyền"],"correct":0},{"id":"vn_178","lang":"vi","num":178,"question":"Từ “ Con Voi” có sử dụng dấu thanh gì?","answers":["Dấu nặng","Không có dấu thanh nào","Dấu hỏi"],"correct":1},{"id":"vn_179","lang":"vi","num":179,"question":"Bé hãy hoàn thành phép tính sau: 13+1+5=…..?","answers":["19","14","12"],"correct":0},{"id":"vn_180","lang":"vi","num":180,"question":"Bé hãy hoàn thành phép tính sau: 12-2+4=……?","answers":["14","13","12"],"correct":0},{"id":"vn_181","lang":"vi","num":181,"question":"Bé hãy điền dấu >,<,= vào chỗ trống : 3+4………10-5","answers":["Dấu >","Dấu <","Dấu ="],"correct":0},{"id":"vn_182","lang":"vi","num":182,"question":"Bé hãy cho biết đồng hồ sau đây chỉ mấy giờ?","answers":["12 giờ","3 giờ","3 giờ 12 phút"],"correct":1,"image":"images/182.jpg"},{"id":"vn_183","lang":"vi","num":183,"question":"Đây là danh lam thắng cảnh nào?","answers":["Lăng Bác","Văn Miếu Quốc Tử Giám","Dinh Độc Lập"],"correct":0,"image":"images/183.jpg"},{"id":"vn_184","lang":"vi","num":184,"question":"Đây là màu sắc gì?","answers":["Màu xanh dương","Màu xanh lá","Màu vàng"],"correct":1,"image":"images/184.jpg"},{"id":"vn_185","lang":"vi","num":185,"question":"Đây là ai?","answers":["Cô giáo","Cô y tá","Cô thợ may"],"correct":0,"image":"images/185.jpg"},{"id":"vn_186","lang":"vi","num":186,"question":"Đây là loại biển báo giao thông gì?","answers":["Biển báo chỉ dẫn","Biển báo nguy hiểm","Biển báo hiệu lệnh"],"correct":1,"image":"images/186.jpg"},{"id":"vn_187","lang":"vi","num":187,"question":"Số có 1 chữ số bé nhất là số mấy?","answers":["số 0","số 1","số 9"],"correct":0},{"id":"vn_189","lang":"vi","num":189,"question":"Số lớn nhất có 1 chữ số là số mấy?","answers":["số 8","số 7","số 9"],"correct":2},{"id":"vn_190","lang":"vi","num":190,"question":"Số bé nhất có 2 chữ số là số mấy?","answers":["số 10","số 11","số 99"],"correct":0},{"id":"vn_191","lang":"vi","num":191,"question":"Số bé nhất có 3 chữ số là số mấy?","answers":["số 99","số 100","số 20"],"correct":1},{"id":"vn_192","lang":"vi","num":192,"question":"Hình ảnh sau đây có bao nhiêu con mèo?","answers":["Có 6 con mèo","Có 7 con mèo","Có 8 con mèo"],"correct":0,"image":"images/192.jpg"},{"id":"vn_193","lang":"vi","num":193,"question":"Đây là con gì?","answers":["Con Gà mái","Con Gà trống","Con Gà con"],"correct":1,"image":"images/193.jpg"},{"id":"vn_194","lang":"vi","num":194,"question":"Chữ cái “ O” có trong từ nào sau đây?","answers":["Quả Nho","Quả Hồng","Quả Vải"],"correct":0},{"id":"vn_195","lang":"vi","num":195,"question":"Câu hát sau đây : Ba thương con vì con giống mẹ, mẹ thương con vì con giống ba” là lời cùa bài hát nào?","answers":["Nhà mình rất vui","Cả nhà thương nhau","Cả nhà mến yêu"],"correct":1},{"id":"vn_196","lang":"vi","num":196,"question":"Trong câu chuyện “Dê đen và Dê trắng ” dê đen vào rừng để làm gì?","answers":["Tìm sói","Tìm kẻ nào hay gây sự","Hái hoa"],"correct":1},{"id":"vn_197","lang":"vi","num":197,"question":"Trong các câu chuyện con nên học theo ai?","answers":["Nhân vật tốt","Nhân vật xấu","Không ai"],"correct":0},{"id":"vn_198","lang":"vi","num":198,"question":"Tín hiệu giao thông màu vàng báo hiệu chúng ta điều gì?","answers":["Được phép đi","Đi chậm và dừng lại","Không được đi"],"correct":1},{"id":"vn_199","lang":"vi","num":199,"question":"Những hành vi nào bé không nên làm?","answers":["Để tràn nước khi rửa tay","Tắt điện khi đi ra khỏi phòng","Tắt quạt khi không dùng nữa"],"correct":0},{"id":"vn_192b","lang":"vi","num":192,"question":"Quả nào dưới đây thuộc nhóm quả nhiều hạt?","answers":["Quả Xoài","Quả Na","Quả nhãn"],"correct":1},{"id":"vn_200","lang":"vi","num":200,"question":"Để nước cam có thể ngon hơn con sẽ làm gì?","answers":["Pha thêm muối","Pha thêm nước chanh","Pha thêm đường"],"correct":2},{"id":"vn_201","lang":"vi","num":201,"question":"Chú cuội, chị Hằng thường xuất hiện vào ngày nào?","answers":["Tết Trung Thu","Tết Nguyên Đán","Tết Thiếu nhi"],"correct":0},{"id":"vn_202","lang":"vi","num":202,"question":"Những đồ vật nào sẽ nổi trên mặt nước?","answers":["Viên sỏi","Hòn bi","Miếng xốp"],"correct":2},{"id":"vn_203","lang":"vi","num":203,"question":"Đâu là hành động đúng khi bỏ rác?","answers":["Bỏ rác vào thùng rác","Vứt rác giữa sân trường","Vứt rác vào gốc cây"],"correct":0},{"id":"vn_204","lang":"vi","num":204,"question":"Cây cối sống được nhờ vào gì?","answers":["Nước, không khí, chất khoáng, ánh sáng mặt trời","Cơm, thịt, cá, trứng, sữa","Trái cây, sữa"],"correct":0},{"id":"vn_205","lang":"vi","num":205,"question":"Bộ phận giúp ta nhìn thấy mọi vật xung quanh?","answers":["Miệng","Răng","Mắt"],"correct":2},{"id":"vn_206","lang":"vi","num":206,"question":"Ở lớp con dùng cái gì để cắt giấy?","answers":["Cái thước","Cái kéo","Cái bút"],"correct":1},{"id":"vn_207","lang":"vi","num":207,"question":"Con vật nào bay lượn trong không trung?","answers":["Cá heo","Chim","Cá sấu"],"correct":1},{"id":"vn_208","lang":"vi","num":208,"question":"Trái cây nào màu đỏ?","answers":["Dưa hấu","Chuối","Táo"],"correct":2},{"id":"vn_209","lang":"vi","num":209,"question":"Một hình vuông có bao nhiêu cạnh?","answers":["2 cạnh","3 cạnh","4 cạnh"],"correct":2},{"id":"vn_210","lang":"vi","num":210,"question":"Phương tiện nào dùng để chở đồ và chở người đi lại trên đường?","answers":["Xe cộ","Đồ chơi","Bàn chải đánh răng"],"correct":0},{"id":"vn_211","lang":"vi","num":211,"question":"Sau mưa xuất hiện Nhiều màu rất đẹp Là cái gì?","answers":["Mặt trời","Cầu vồng","Mặt trăng"],"correct":1},{"id":"vn_212","lang":"vi","num":212,"question":"Trong các phép tính sau đây, phép tính nào có kết quả là 15?","answers":["6 + 2 = ?","9 - 4 = ?","10 + 5 = ?"],"correct":2},{"id":"vn_213","lang":"vi","num":213,"question":"Các khối sau đây khối nào đứng được?","answers":["Hình tròn","Khối cầu","Khối vuông"],"correct":2},{"id":"vn_214","lang":"vi","num":214,"question":"Trong các phép tính sau đây, phép tính nào có kết quả là 15?","answers":["6 + 2 = ?","19 - 4 = ?","10 +6 = ?"],"correct":1},{"id":"vn_215","lang":"vi","num":215,"question":"Ý nghĩa của ngày 30/4 là gì?","answers":["Ngày giải phóng Miền Nam thống nhất đất nước","Ngày Quốc tế Lao động","Ngày Quốc Khánh"],"correct":0},{"id":"vn_216","lang":"vi","num":216,"question":"Ý nghĩa của ngày 1/5 là gì?","answers":["Ngày Quốc Khánh","Ngày Quốc tế Lao động","Ngày Quốc tế Phụ nữ"],"correct":1},{"id":"vn_217","lang":"vi","num":217,"question":"Nhân vật sói trong câu chuyện là con vật như thế nào","answers":["Gian ác","Nhút nhát","Hiền"],"correct":0},{"id":"vn_218","lang":"vi","num":218,"question":"Đây là lá cờ của nước nào?","answers":["Nước Mỹ","Nước Lào","Nước Anh"],"correct":2,"image":"images/218.jpg"},{"id":"vn_219","lang":"vi","num":219,"question":"Nước Việt Nam có bao nhiêu dân tộc?","answers":["54","55","56"],"correct":0},{"id":"vn_220","lang":"vi","num":220,"question":"Tên lúc nhỏ của Bác Hồ là gì?","answers":["Nguyễn Sinh Khiêm","Nguyễn Tất Đạt","Nguyễn Sinh Cung"],"correct":2},{"id":"vn_221","lang":"vi","num":221,"question":"Thân sinh của Chủ tịch Hồ Chí Minh tên là gì?","answers":["Nguyễn Thị Thanh","Nguyễn Thị Loan","Hoàng Thị Loan"],"correct":2},{"id":"vn_222","lang":"vi","num":222,"question":"Bác Hồ mất vào ngày tháng năm nào?","answers":["2/9/1969","2/9/1999","2/9/1998"],"correct":0},{"id":"vn_223","lang":"vi","num":223,"question":"Bác Hồ mất ở đâu?","answers":["Tại Nghệ An","Tại Hà Nội","Tại TP. Hồ Chí Minh"],"correct":1},{"id":"vn_224","lang":"vi","num":224,"question":"Bác Hồ sinh ra ở đâu?","answers":["Xã Kim Liên, huyện Nam Đàn, tỉnh Nghệ An","Làng Thanh Liên, huyện Nam Đàn, tỉnh Nghệ An","Làng Kim Liên, huyện Quỳnh Lưu, tỉnh Nghệ An"],"correct":0},{"id":"vn_225","lang":"vi","num":225,"question":"Bác Hồ qua đời lúc mấy giờ?","answers":["9 giờ 46 phút","9 giờ 47 phút","9 giờ 48 phút"],"correct":1},{"id":"vn_226","lang":"vi","num":226,"question":"Bác Hồ có yêu nước không?","answers":["Không","Không biết","Có"],"correct":2},{"id":"vn_227","lang":"vi","num":227,"question":"Tìm mảnh ghép còn thiếu","answers":["Đáp án B","Đáp án C","Đáp án A"],"correct":1,"image":"images/227.jpg"},{"id":"vn_228","lang":"vi","num":228,"question":"Đây là lá cờ của nước nào?","answers":["Nước Nga","Nước Lào","Nước Thái Lan"],"correct":2,"image":"images/228.jpg"},{"id":"vn_229","lang":"vi","num":229,"question":"Tìm mảnh ghép còn thiếu?","answers":["Đáp án B","Đáp án C","Đáp án A"],"correct":0,"image":"images/229.jpg"},{"id":"vn_230","lang":"vi","num":230,"question":"Đây là hoạt động gì trong trường Mầm non?","answers":["Hoạt động vui chơi","Hoạt động học","Hoạt động vệ sinh"],"correct":1,"image":"images/230.jpg"},{"id":"vn_231","lang":"vi","num":231,"question":"Hoạt động nào sau đây phù hợp với thời gian vào buổi sáng tại Mầm Non Tuổi Thơ?","answers":["Hoạt động đi ngủ","Hoạt động ăn trưa","Hoạt động tráo thẻ"],"correct":2},{"id":"vn_232","lang":"vi","num":232,"question":"Con Voi và con Hươu cao cổ con vật nào cao hơn?","answers":["Con Hươu cao cổ","Con Voi","Hai con vật bằng nhau"],"correct":0},{"id":"vn_233","lang":"vi","num":233,"question":"Các thẻ từ sau đây : “Xe đạp, xe máy, xe ô tô” thuộc chủ đề gì?","answers":["Chủ đề Nước và các hiện tượng tự nhiên","Chủ đề Phương tiện giao thông","Chủ đề Trường mầm non"],"correct":1},{"id":"vn_234","lang":"vi","num":234,"question":"Đây là quả gì?","answers":["Quả Măng Cụt","Quả Cherry","Quả Đào"],"correct":0,"image":"images/234.jpg"},{"id":"vn_235","lang":"vi","num":235,"question":"“Trẻ làm sai thì nên làm gì?","answers":["La mắng","Hướng dẫn","Bỏ qua"],"correct":1},{"id":"vn_236","lang":"vi","num":236,"question":"Gia đình có ông bà, bố mẹ và các con là gia đình có mấy thế hệ?","answers":["Gia đình có 2 thế hệ","Gia đình có 3 thế hệ","Gia đình có 4 thế hệ"],"correct":1},{"id":"vn_237","lang":"vi","num":237,"question":"Hình có ba cạnh là hình gì ?","answers":["Hình chữ nhật","Hình vuông","Hình tam giác"],"correct":2},{"id":"vn_238","lang":"vi","num":238,"question":"Khi bé đang chơi bóng mà quả bóng lăn ra giữa đường có nhiều phương tiện giao thông bé sẽ làm gì?","answers":["Nhờ người lớn giúp đỡ","Chạy ra đường nhặt bóng","Đứng khóc"],"correct":0},{"id":"vn_238b","lang":"vi","num":238,"question":"Trong câu truyện ngày và đêm vì sao lại có ngày và đêm?","answers":["Do mặt trời","Do trái đất quay","Do mưa"],"correct":1},{"id":"vn_239","lang":"vi","num":239,"question":"Bạn An rửa tay xong không tắt vòi nước. Nếu nhìn thấy con sẽ làm gì?","answers":["Không tắt nước, đi chỗ khác chơi","Tắt vòi nước, và đến gọi bạn An lại nhắc nhở lần sau nhớ tắt nước","Kêu các bạn lại nghịch nước"],"correct":1},{"id":"vn_240","lang":"vi","num":240,"question":"Số đứng liền trước số 8 là số gì?","answers":["Số 7","Số 9","Số 10"],"correct":1},{"id":"vn_241","lang":"vi","num":241,"question":"Thời tiết như thế nào được gọi là bão","answers":["Trời mát dịu","Trời nắng, nóng","Mưa to, gió lớn"],"correct":2},{"id":"vn_242","lang":"vi","num":242,"question":"Nắng, nóng, sấm chớp là hiện tượng thiên nhiên xảy ra vào mùa nào?","answers":["Mùa xuân","Mùa thu","Mùa hè"],"correct":2},{"id":"vn_243","lang":"vi","num":243,"question":"Mùa xuân cây cối thường thế nào?","answers":["Đâm chồi nảy lộc","Cành cây khẳng khiu, lá rụng","Cây ra hoa kết trái"],"correct":0},{"id":"vn_244","lang":"vi","num":244,"question":"Người làm nhiệm vụ canh giữ biển trời hải đảo là ai?","answers":["Chú Công nhân","Chú Lái xe","Chú bộ đội Hải quân"],"correct":2},{"id":"vn_245","lang":"vi","num":245,"question":"Nhóm thực phẩm nào sau đây hòa tan được trong nước?","answers":["Gạo, lạc, vừng","Muối, đường","Rau cải, củ cà rốt, củ khoai"],"correct":1},{"id":"vn_246","lang":"vi","num":246,"question":"“Cái gì hai lưỡi, không răng. Mà nhai giấy, vải băng băng lạ kỳ”. Là cái gì?","answers":["Cái dao","Cái kéo","Cái cưa"],"correct":1},{"id":"vn_247","lang":"vi","num":247,"question":"“Cái gì bật sáng trong đêm. Giúp cho nhà dưới, nhà trên sáng ngời”. Là cái gì?","answers":["Bóng đèn điện","Con đom đóm","Ông sao"],"correct":0},{"id":"vn_248","lang":"vi","num":248,"question":"“Khi nước đổ ra sàn các con cần làm gì?","answers":["Chạy đi","Lấy chổi lau","Để như vậy"],"correct":1},{"id":"vn_249","lang":"vi","num":249,"question":"Gia đình có nhiều con nhất là gia đình nào sau đây?","answers":["Gia đình có 1 con","Gia đình có 2 con","Gia đình có 4 con"],"correct":2},{"id":"vn_250","lang":"vi","num":250,"question":"Khi có 10 bạn chơi trò chơi “kéo co” thì số người chơi của 2 đội sẽ chia như thế nào?","answers":["Số người chơi của 2 đội bằng nhau và mỗi đội là 5 bạn","Số người chơi của 2 đội không bằng nhau: 4 bạn và 6 bạn","Số người chơi của 2 đội không bằng nhau: 3 bạn và 7 bạn"],"correct":0},{"id":"vn_251","lang":"vi","num":251,"question":"Mùa hè ông mặt trời lên cao nhất và tỏa nắng nóng nhất vào thời điểm nào?","answers":["Buổi sáng","Buổi trưa","Buổi chiều"],"correct":1},{"id":"vn_252","lang":"vi","num":252,"question":"“Tôi là số 6 mất đầu. Và là số 9 mất đuôi. Còn là số 8 mất thân”. Hỏi tôi là số mấy nhỉ?","answers":["Số 8","Số 10","Số 0"],"correct":2},{"id":"vn_253","lang":"vi","num":253,"question":"Ai muốn chân ấm, phải dùng đến tôi, nhưng phải một đôi, đôi gì thế nhỉ?","answers":["Đôi găng tay","Đôi đũa","Đôi tất"],"correct":2},{"id":"vn_254","lang":"vi","num":254,"question":"Em bé trong bài thơ “Giữ nụ cười xinh” dùng bàn chải để làm gì?","answers":["Chải tóc","Đánh răng","Chải móng tay"],"correct":1},{"id":"vn_255","lang":"vi","num":255,"question":"Người lái máy bay được gọi là gì?","answers":["Công nhân","Phi công","Tài xế"],"correct":1},{"id":"vn_256","lang":"vi","num":256,"question":"Muốn có cơ thể khỏe mạnh chúng ta phải làm gì?","answers":["Ăn uống đủ chất ","Chăm tập luyện thể thao","Cả 2 đáp án trên"],"correct":2},{"id":"vn_257","lang":"vi","num":257,"question":"Để thể hiện tình cảm của mình với ông,bà, bố mẹ, cô giáo chúng mình làm gì?","answers":["Chăm ngoan, học giỏi vâng lời người lớn","Không vâng lời ông bà, bố mẹ, cô giáo","Hay giận dôi, khóc nhè"],"correct":0},{"id":"vn_258","lang":"vi","num":258,"question":"Loại rác nào dưới đây có thể tự phân hủy được trong thời gian ngắn?","answers":["Rau xanh ăn thừa","Túi nylon","Bát thủy tinh bị vỡ"],"correct":0},{"id":"vn_259","lang":"vi","num":259,"question":"Nguồn năng lượng nào dưới đây là năng lượng thân thiện với môi trường?","answers":["Năng lượng từ than","Năng lượng từ thủy điện","Năng lượng từ mặt trời"],"correct":2},{"id":"vn_260","lang":"vi","num":260,"question":"Phương tiện nào dưới đây thân thiện với môi trường nhất?","answers":["Ô tô","Xe đạp","Tàu hỏa"],"correct":1},{"id":"vn_261","lang":"vi","num":261,"question":"Hoạt động nào dưới đây có lợi cho cơ thể ?","answers":["Không tắt đèn bàn học sau khi học xong","Chặt cây để đốn củi","Ăn nhiều rau xanh"],"correct":2},{"id":"vn_262","lang":"vi","num":262,"question":"Cây nào dưới đây có củ?","answers":["Cây khoai lang","Cây táo","Cây mít"],"correct":0},{"id":"vn_263","lang":"vi","num":263,"question":"Ai là người sáng tác bài hát “ Cháu thương chú bộ đội” ?","answers":["Hoàng Văn Yến","Phạm Tuyên","Phạm Trọng Cầu"],"correct":0},{"id":"vn_264","lang":"vi","num":264,"question":"Tín hiệu đèn giao thông màu xanh báo hiệu chúng ta điều gì?","answers":["Được phép đi tiếp","Dừng lại","Giảm tốc độ"],"correct":0},{"id":"vn_265","lang":"vi","num":265,"question":"Vạch kẻ qua đường có màu gì ?","answers":["Màu đen","Màu xanh","Màu trắng"],"correct":2},{"id":"vn_266","lang":"vi","num":266,"question":"Công việc của cô giáo là gì?","answers":["Dạy học","Khám chữa bệnh","Làm ra các loại lương thực ( ngô, khoai, lúa, rau…)"],"correct":0},{"id":"vn_267","lang":"vi","num":267,"question":"Bác sĩ cần dụng cụ gì để khám bệnh?","answers":["Ống nghe","Cuốc xẽng","Giấy, bút"],"correct":0},{"id":"vn_268","lang":"vi","num":268,"question":"Xe máy là phương tiện giao thông đường gì?","answers":["Đường hàng Không","Đường bộ","Đường thủy"],"correct":1},{"id":"vn_269","lang":"vi","num":269,"question":"Máy bay là phương tiện giao thông đường gì?","answers":["Đường hàng không","Đưòng bộ","Đường sắt"],"correct":0},{"id":"vn_269b","lang":"vi","num":269,"question":"Tàu hỏa là phương Tiện giao thông đường gì?","answers":["Đường bộ","Đường sắt","Đường thủy"],"correct":1},{"id":"vn_270","lang":"vi","num":270,"question":"Cần làm điều gì khi được người lạ cho bánh kẹo?","answers":["Đi cùng người lạ","Không lấy bánh kẹo, la lớn lên “ Có người lạ”","Nói chuyện cùng người lạ"],"correct":1},{"id":"vn_271","lang":"vi","num":271,"question":"Quả gì sau đây có ruột màu vàng hạt to, một hạt?","answers":["Quả Táo","Quả Cam","Quả Xoài"],"correct":2},{"id":"vn_273","lang":"vi","num":273,"question":"Ở giữa lá cờ Việt Nam có hình gì?","answers":["Hình ngôi sao","Hình bông hoa","Hình lưỡi liềm"],"correct":0},{"id":"vn_274","lang":"vi","num":274,"question":"Khi chạm vào cát, con thấy thế nào??","answers":["Cứng , Khô","Mềm , mịn , khô","Ướt , Khô"],"correct":1},{"id":"vn_275","lang":"vi","num":275,"question":"Vẽ, tô màu, nặn, xé, dán thuộc hoạt động nào sau đây?","answers":["Hoạt động làm quen với toán","Hoạt động tạo hình","Hoạt động nhận biết"],"correct":1},{"id":"vn_276","lang":"vi","num":276,"question":"Khối mẫu giáo lớn tại Mầm non Tuổi Thơ có tên gọi là gì?","answers":["Khối KINDY","Khối PREK","Khối NURSERY"],"correct":0},{"id":"vn_277","lang":"vi","num":277,"question":"Khối mẫu giáo bé tại Mầm non Tuổi Thơ có tên gọi là gì?","answers":["Khối KINDY","Khối PREK","Khối NURSERY"],"correct":1},{"id":"vn_278","lang":"vi","num":278,"question":"Khối nhà trẻ tại Mầm non Tuổi Thơ có tên gọi là gì?","answers":["Khối KINDY","Khối PREK","Khối NURSERY"],"correct":2},{"id":"vn_279","lang":"vi","num":279,"question":"Ở trường các con ngủ như thế nào?","answers":["Mỗi bạn 1 giường 1 gối và 1 chăn","Mỗi bạn 1 giường 2 gối và 1 chăn","Hai bạn 1 giường 1 gối và 1 chăn"],"correct":0},{"id":"vn_280","lang":"vi","num":280,"question":"Trong các loài động vật sau đây, loài nào có bộ lông màu trắng và sống ở Bắc Cực?","answers":["Gấu trắng","Hổ Siberia","Gấu nâu"],"correct":0},{"id":"vn_281","lang":"vi","num":281,"question":"Loại mũ nào sau đây dùng để bảo vệ đầu khi đi xe máy?","answers":["Mũ bảo hiểm","Mũ cói","Mũ len"],"correct":0},{"id":"vn_282","lang":"vi","num":282,"question":"Con vật nào sống trong nước và có vây?","answers":["Cá","Chim","Mèo"],"correct":0},{"id":"vn_283","lang":"vi","num":283,"question":"Đâu là con vật không có xương sống?","answers":["Rắn","Chim","Ốc sên"],"correct":2},{"id":"vn_284","lang":"vi","num":284,"question":"Cách đây bốn ngàn năm, các vua Hùng dựng nước và đặt tên nước là?","answers":["Văn Lang","Việt Nam","Trung Quốc"],"correct":0},{"id":"vn_285","lang":"vi","num":285,"question":"Các loài hoa có hình dạng, kích thước?","answers":["giống nhau","bằng nhau","khác nhau"],"correct":2},{"id":"vn_286","lang":"vi","num":286,"question":"Ăn chậm, nhai kĩ có lợi gì?","answers":["Không sâu răng","Cung cấp nhiều Vita min cho cơ thể","Tránh bị nghẹn và hóc xương. Thức ăn được nghiền nát tốt hơn"],"correct":2},{"id":"vn_287","lang":"vi","num":287,"question":"Lớp không khí bao quanh Trái Đất gọi là gì?","answers":["Thủy quyển","Thạch quyển","Khí quyển"],"correct":2},{"id":"vn_288","lang":"vi","num":288,"question":"Từ ngữ nào trái nghĩa với từ \"đoàn kết\"?","answers":["Hòa bình","Chia rẽ","Thương yêu"],"correct":1},{"id":"vn_289","lang":"vi","num":289,"question":"Em bé nằm trong bụng mẹ gọi là gì?","answers":["Bào thai ( thai nhi)","Đồng bào","Bào trứng"],"correct":0},{"id":"vn_290","lang":"vi","num":290,"question":"Nhiệt độ cơ thể của người bình thường là bao nhiêu ?","answers":["36 độ","37 độ","38 độ"],"correct":1},{"id":"vn_291","lang":"vi","num":291,"question":"Tỉnh nào của nước ta có diện tích lớn nhất?","answers":["Nghệ An","Hà Tĩnh","Thanh Hóa"],"correct":0},{"id":"vn_292","lang":"vi","num":292,"question":"Hành tinh nào gần Mặt trời nhất?","answers":["Sao Hỏa","Sao Thủy","Sao Mộc"],"correct":1},{"id":"vn_293","lang":"vi","num":293,"question":"Cuộc thi bé đang tham dự có tên là gì?","answers":["Hội thi thể dục thể thao","Hội thi Rung chuông vàng","Hội thi Viết chữ đẹp"],"correct":1},{"id":"vn_294","lang":"vi","num":294,"question":"Vào thư viện bé thường được làm gì?","answers":["Đọc sách truyện","Ngồi tô màu","Ngồi nghe nhạc"],"correct":0},{"id":"vn_295","lang":"vi","num":295,"question":"Chữ cái H có trong từ nào sau đây?","answers":["Hoa hồng","Quả ớt","Kẹo mút"],"correct":0},{"id":"vn_296","lang":"vi","num":296,"question":"Ai là người sinh ra con?","answers":["Bà","Mẹ","Anh"],"correct":1},{"id":"vn_297","lang":"vi","num":297,"question":"Người sinh ra mẹ của con gọi tên là gì?","answers":["Ông bà ngoại","Ông bà nội","Ông bà cố"],"correct":0},{"id":"vn_298","lang":"vi","num":298,"question":"Người sinh ra bố của con gọi tên là gì?","answers":["Ông bà ngoại","Ông bà nội","Ông bà cố"],"correct":1},{"id":"vn_299","lang":"vi","num":299,"question":"Tay nào các con dùng để viết, để tô màu?","answers":["Tay trái","Tay phải","Tay sạch"],"correct":1},{"id":"vn_300","lang":"vi","num":300,"question":"Để chơi trò chơi mèo đuổi chuột các con phải xếp thành hình gì?","answers":["Xếp thành hình vòng tròn","Xếp thành 2 đường thẳng","Xếp thành hình tam giác"],"correct":0}],"english":[{"id":"en_301","lang":"en","num":301,"question":"What color is the sky on a sunny day?","answers":["Blue","Green","Black"],"correct":0},{"id":"en_302","lang":"en","num":302,"question":"Which number is “three”?","answers":["2","3","5"],"correct":1},{"id":"en_303","lang":"en","num":303,"question":"Which animal says “meow”?","answers":["Dog","Cat","Bird"],"correct":1},{"id":"en_304","lang":"en","num":304,"question":"What do you say when you meet your teacher in the morning?","answers":["Goodbye","Hello","Thank you"],"correct":1},{"id":"en_305","lang":"en","num":305,"question":"Which is a school thing?","answers":["Book","Fish","Apple"],"correct":0},{"id":"en_306","lang":"en","num":306,"question":"Which part of the body do you use to see?","answers":["Eyes","Ears","Nose"],"correct":0},{"id":"en_307","lang":"en","num":307,"question":"How many people are there in your family?","answers":["Red","Four","Book"],"correct":1},{"id":"en_308","lang":"en","num":308,"question":"Which word is a school thing?","answers":["Eraser","Tiger","Chicken"],"correct":0},{"id":"en_309","lang":"en","num":309,"question":"What color is milk?","answers":["White","Green","Black"],"correct":0},{"id":"en_310","lang":"en","num":310,"question":"Which animal can swim?","answers":["Fish","Cat","Monkey"],"correct":0},{"id":"en_312","lang":"en","num":312,"question":"i live on the farm. I’m black and white. I give milk . what animal am i?","answers":["Cow","Sheep","Duck"],"correct":0},{"id":"en_313","lang":"en","num":313,"question":"my teacher give me 4 red pencils, 3 yellow pencils, 2 blue pencils. How many pencils do i have in total?","answers":["7","8","9"],"correct":2},{"id":"en_314","lang":"en","num":314,"question":"i have 14 cakes i give my brother 1 cake . how many cakes do i have now?","answers":["11","12","13"],"correct":2},{"id":"en_315","lang":"en","num":315,"question":"What do you say when you want to ask someone’s name?","answers":["How old are you?","What is your name?","Where are you from?"],"correct":1},{"id":"en_316","lang":"en","num":316,"question":"Which number is “twelve”?","answers":["20","12","21"],"correct":1},{"id":"en_317","lang":"en","num":317,"question":"Which number comes after 15?","answers":["14","16","18"],"correct":1},{"id":"en_318","lang":"en","num":318,"question":"What is the opposite of “big”?","answers":["Tall","Small","Long"],"correct":1},{"id":"en_319","lang":"en","num":319,"question":"My father is a doctor. What does he do?","answers":["He is a doctor","He is tall","He is at home"],"correct":0},{"id":"en_320","lang":"en","num":320,"question":"How many colors are in a rainbow?","answers":["Five","Six","Seven"],"correct":2},{"id":"en_322","lang":"en","num":322,"question":"Letter “ c” is for.....","answers":["Duck","Alligator","Computer"],"correct":2},{"id":"en_323","lang":"en","num":323,"question":"What is seven plus nine?","answers":["15","17","16"],"correct":2},{"id":"en_324","lang":"en","num":324,"question":"Letter “ d ” is for.....","answers":["Pig","Doll","Pen"],"correct":1},{"id":"en_325","lang":"en","num":325,"question":"Eleven plus seven equals","answers":["18","19","17"],"correct":0},{"id":"en_326","lang":"en","num":326,"question":"What does a green traffic light mean?","answers":["Stop","Go","Wait"],"correct":1},{"id":"en_327","lang":"en","num":327,"question":"How many days are there in a week?","answers":["Five","Seven","Ten"],"correct":1},{"id":"en_328","lang":"en","num":328,"question":"What do you use to write?","answers":["Spoon","Pencil","Shoes"],"correct":1},{"id":"en_329","lang":"en","num":329,"question":"the capital of Viet Nam is ….?","answers":["Ho Chi Minh city","Ha Noi","Da nang city"],"correct":1},{"id":"en_330","lang":"en","num":330,"question":"What color is the star on the Vietnamese flag?","answers":["Red","Yellow","Blue"],"correct":1},{"id":"en_331","lang":"en","num":331,"question":"What’s the name of a place you go to see lots of animals?","answers":["The zoo","The park","The beach"],"correct":0},{"id":"en_332","lang":"en","num":332,"question":"Which letter is missing in this word? B...rd","answers":["Letter a","Letter i","Letter u"],"correct":1,"image":"images/332.jpg"},{"id":"en_333","lang":"en","num":333,"question":"Which letter is missing in this word? ....en.","answers":["Letter o","Letter p","Letter m"],"correct":1}]};
+</script>
+<script>
+// ============================================================
+// DATA
+// ============================================================
+let QUESTIONS = { vietnamese: [], english: [] };
+let gameQuestions = [];
+let currentIndex = 0;
+let correctCount = 0;
+let gameMode = 'random';
+let lastWrong = null;
+let speechReady = false;
+let currentUtterance = null;
+
+// Load questions from embedded data
+QUESTIONS = EMBEDDED_QUESTIONS;
+speechReady = true;
+document.addEventListener('DOMContentLoaded', () => {
+  initStars();
+  checkVietnameseVoice();
+});
+
+function checkVietnameseVoice() {
+  if (!window.speechSynthesis) return;
+  const check = () => {
+    const voices = window.speechSynthesis.getVoices();
+    if (voices.length === 0) return; // not loaded yet
+    const hasVi = voices.some(v => v.lang && v.lang.toLowerCase().startsWith('vi'));
+    if (!hasVi) {
+      document.getElementById('voice-warning').style.display = 'block';
+    }
+  };
+  // Voices may load async
+  check();
+  window.speechSynthesis.onvoiceschanged = check;
+}
+// Also try to load from file as fallback (for servers)
+fetch('./questions.json')
+  .then(r => r.json())
+  .then(data => { QUESTIONS = data; })
+  .catch(() => {}); // silent fallback to embedded
+
+// ============================================================
+// STARS BACKGROUND
+// ============================================================
+function initStars() {
+  const container = document.getElementById('stars');
+  for (let i = 0; i < 80; i++) {
+    const star = document.createElement('div');
+    star.className = 'star';
+    star.style.left = Math.random() * 100 + '%';
+    star.style.top = Math.random() * 100 + '%';
+    star.style.animationDelay = Math.random() * 3 + 's';
+    star.style.animationDuration = (2 + Math.random() * 3) + 's';
+    const size = Math.random() * 3 + 1;
+    star.style.width = size + 'px';
+    star.style.height = size + 'px';
+    container.appendChild(star);
+  }
+}
+
+// ============================================================
+// COUNTDOWN TIMER
+// ============================================================
+const COUNTDOWN_SECONDS = 20;
+let countdownInterval = null;
+let countdownTimeLeft = 0;
+const CIRCUMFERENCE = 151; // 2 * π * 24 ≈ 150.8
+
+function startCountdown() {
+  clearCountdown();
+  countdownTimeLeft = COUNTDOWN_SECONDS;
+  updateCountdownDisplay(countdownTimeLeft);
+
+  countdownInterval = setInterval(() => {
+    countdownTimeLeft--;
+    updateCountdownDisplay(countdownTimeLeft);
+    if (countdownTimeLeft <= 0) {
+      clearCountdown();
+      handleTimeout();
+    }
+  }, 1000);
+}
+
+function clearCountdown() {
+  if (countdownInterval) {
+    clearInterval(countdownInterval);
+    countdownInterval = null;
+  }
+}
+
+function updateCountdownDisplay(t) {
+  const numEl = document.getElementById('countdown-num');
+  const fillEl = document.getElementById('countdown-fill');
+  if (!numEl || !fillEl) return;
+
+  numEl.textContent = t;
+
+  const offset = CIRCUMFERENCE * (1 - t / COUNTDOWN_SECONDS);
+  fillEl.style.strokeDashoffset = offset;
+
+  const cls = t <= 5 ? 'danger' : t <= 10 ? 'warning' : '';
+  numEl.className = 'countdown-num' + (cls ? ' ' + cls : '');
+  fillEl.className = 'ring-fill' + (cls ? ' ' + cls : '');
+}
+
+function handleTimeout() {
+  const q = gameQuestions[currentIndex];
+  const btnIds = ['btn-A', 'btn-B', 'btn-C'];
+
+  btnIds.forEach(id => document.getElementById(id).disabled = true);
+  stopSpeech();
+
+  document.getElementById(btnIds[q.correct]).classList.add('correct');
+  playWrongSound();
+
+  const overlay = document.getElementById('result-overlay');
+  overlay.className = 'result-overlay wrong-result';
+  document.getElementById('result-icon').textContent = '⏰';
+  document.getElementById('result-title').textContent = 'Hết giờ rồi!';
+  document.getElementById('result-title').style.color = '#C0392B';
+  document.getElementById('result-subtitle').textContent = 'Đáp án đúng là: ' + q.answers[q.correct];
+  speakText('Hết giờ rồi!', 'vi');
+  overlay.classList.add('show');
+
+  if (resultTimer) clearTimeout(resultTimer);
+
+  if (gameMode === 'random') {
+    lastWrong = {
+      qnum: currentIndex + 1,
+      origNum: q.num,
+      question: q.question,
+      yourAnswer: '⏰ Hết giờ',
+      rightAnswer: q.answers[q.correct],
+      lang: q.lang
+    };
+    resultTimer = setTimeout(() => {
+      overlay.classList.remove('show');
+      showGameOver();
+    }, 2000);
+  } else {
+    resultTimer = setTimeout(() => {
+      overlay.classList.remove('show');
+      showQuestion(currentIndex + 1);
+    }, 1500);
+  }
+}
+
+// ============================================================
+// SCREEN MANAGEMENT
+// ============================================================
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  stopSpeech();
+  clearCountdown();
+}
+
+// ============================================================
+// GAME SETUP
+// ============================================================
+function startGame(mode) {
+  playBellSound();
+  gameMode = mode;
+  currentIndex = 0;
+  correctCount = 0;
+  lastWrong = null;
+
+  if (mode === 'random') {
+    gameQuestions = buildRandom30();
+  } else {
+    gameQuestions = buildFullReview();
+  }
+
+  document.getElementById('q-total').textContent = gameQuestions.length;
+  showScreen('screen-game');
+  showQuestion(0);
+}
+
+function retryGame() {
+  startGame(gameMode);
+}
+
+function buildRandom30() {
+  const vn = [...QUESTIONS.vietnamese];
+  const en = [...QUESTIONS.english];
+
+  // Shuffle helper
+  const shuffle = arr => {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  };
+
+  shuffle(vn);
+  shuffle(en);
+
+  // Always pick exactly 3 English
+  const enCount = 3;
+  const selectedEn = en.slice(0, enCount);
+  // Pick 27 Vietnamese
+  const vnCount = 27;
+  const selectedVn = vn.slice(0, vnCount);
+
+  // Spread English across the set
+  const combined = [...selectedVn];
+  const positions = shuffle([5, 10, 15, 22, 26]).slice(0, enCount);
+  positions.sort((a, b) => a - b);
+
+  const result = [...combined];
+  positions.forEach((pos, i) => {
+    result.splice(Math.min(pos, result.length), 0, selectedEn[i]);
+  });
+
+  return result.slice(0, 30);
+}
+
+function buildFullReview() {
+  const vn = [...QUESTIONS.vietnamese].sort((a, b) => a.num - b.num);
+  const en = [...QUESTIONS.english].sort((a, b) => a.num - b.num);
+  return [...vn, ...en];
+}
+
+// ============================================================
+// QUESTION DISPLAY
+// ============================================================
+function showQuestion(index) {
+  if (index >= gameQuestions.length) {
+    showWin();
+    return;
+  }
+
+  currentIndex = index;
+  const q = gameQuestions[index];
+
+  // Update header
+  document.getElementById('q-current').textContent = index + 1;
+  document.getElementById('q-correct-count').textContent = correctCount;
+
+  // Progress bar
+  const pct = (index / gameQuestions.length) * 100;
+  document.getElementById('progress-fill').style.width = pct + '%';
+
+  // Lang badge
+  const badge = document.getElementById('lang-badge');
+  if (q.lang === 'en') {
+    badge.textContent = 'ENGLISH';
+    badge.className = 'lang-badge en';
+  } else {
+    badge.textContent = 'TIẾNG VIỆT';
+    badge.className = 'lang-badge vi';
+  }
+
+  // Question text
+  document.getElementById('q-num-label').textContent =
+    gameMode === 'review' ? `Câu ${q.num} (${q.lang === 'en' ? 'Tiếng Anh' : 'Tiếng Việt'})` : `Câu số ${index + 1}`;
+  document.getElementById('question-text').textContent = q.question;
+
+  // Question image
+  const qImg = document.getElementById('question-img');
+  if (q.image) {
+    qImg.src = q.image;
+    qImg.style.display = 'block';
+  } else {
+    qImg.src = '';
+    qImg.style.display = 'none';
+  }
+
+  // Answer buttons
+  const letters = ['A', 'B', 'C'];
+  const btnIds = ['btn-A', 'btn-B', 'btn-C'];
+  btnIds.forEach((id, i) => {
+    const btn = document.getElementById(id);
+    btn.className = 'answer-btn';
+    btn.disabled = false;
+    btn.querySelector('.letter').textContent = letters[i];
+    const ansText = btn.querySelector('.ans-text');
+    if (q.answerImages && q.answerImages[i]) {
+      btn.classList.add('has-img');
+      ansText.innerHTML = `<img class="ans-img" src="${q.answerImages[i]}" alt="${letters[i]}"/>`;
+    } else {
+      btn.classList.remove('has-img');
+      ansText.textContent = q.answers[i];
+    }
+  });
+
+  // Auto-speak after short delay, countdown starts after speech ends
+  setTimeout(() => speakQuestion(q), 400);
+}
+
+// ============================================================
+// SPEECH
+// ============================================================
+function stopSpeech() {
+  if (window.speechSynthesis) {
+    window.speechSynthesis.cancel();
+  }
+  currentUtterance = null;
+  document.getElementById('speak-btn').classList.remove('speaking');
+}
+
+function speakText(text, lang, onEnd) {
+  if (!window.speechSynthesis) {
+    if (onEnd) onEnd();
+    return;
+  }
+  stopSpeech();
+
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = lang === 'en' ? 'en-US' : 'vi-VN';
+  utter.rate = 0.9;
+  utter.pitch = 1.0;
+  utter.volume = 1.0;
+
+  currentUtterance = utter;
+
+  const speakBtn = document.getElementById('speak-btn');
+  speakBtn.classList.add('speaking');
+
+  utter.onend = () => {
+    speakBtn.classList.remove('speaking');
+    currentUtterance = null;
+    if (onEnd) onEnd();
+  };
+
+  utter.onerror = () => {
+    speakBtn.classList.remove('speaking');
+    currentUtterance = null;
+    if (onEnd) onEnd();
+  };
+
+  window.speechSynthesis.speak(utter);
+}
+
+function speakQuestion(q) {
+  const lang = q.lang;
+  const fullText = q.question + '. ' +
+    (lang === 'en' ? 'A: ' : 'A. ') + q.answers[0] + '. ' +
+    (lang === 'en' ? 'B: ' : 'B. ') + q.answers[1] + '. ' +
+    (lang === 'en' ? 'C: ' : 'C. ') + q.answers[2];
+  clearCountdown();
+  speakText(fullText, lang, startCountdown);
+}
+
+function speakCurrent() {
+  if (currentIndex < gameQuestions.length) {
+    speakQuestion(gameQuestions[currentIndex]);
+  }
+}
+
+// ============================================================
+// ANSWER HANDLING
+// ============================================================
+function selectAnswer(answerIndex) {
+  const q = gameQuestions[currentIndex];
+  const btnIds = ['btn-A', 'btn-B', 'btn-C'];
+
+  // Disable all buttons
+  btnIds.forEach(id => document.getElementById(id).disabled = true);
+
+  clearCountdown();
+  stopSpeech();
+
+  if (answerIndex === q.correct) {
+    // CORRECT
+    document.getElementById(btnIds[answerIndex]).classList.add('correct');
+    correctCount++;
+    playCorrectSound();
+    showResultOverlay(true, q.answers[q.correct]);
+  } else {
+    // WRONG
+    document.getElementById(btnIds[answerIndex]).classList.add('wrong');
+    document.getElementById(btnIds[q.correct]).classList.add('correct');
+    playWrongSound();
+
+    lastWrong = {
+      qnum: currentIndex + 1,
+      origNum: q.num,
+      question: q.question,
+      yourAnswer: q.answers[answerIndex],
+      rightAnswer: q.answers[q.correct],
+      lang: q.lang
+    };
+
+    showResultOverlay(false, q.answers[q.correct]);
+  }
+}
+
+// ============================================================
+// RESULT OVERLAY
+// ============================================================
+let resultTimer = null;
+
+function showResultOverlay(isCorrect, correctAnswer) {
+  const overlay = document.getElementById('result-overlay');
+  const icon = document.getElementById('result-icon');
+  const title = document.getElementById('result-title');
+  const subtitle = document.getElementById('result-subtitle');
+
+  if (isCorrect) {
+    overlay.className = 'result-overlay correct-result';
+    const msgs = ['🌟 Tuyệt vời!', '⭐ Chính xác!', '🎉 Giỏi quá!', '👏 Xuất sắc!'];
+    icon.textContent = ['✅', '🎯', '🌟', '⭐'][Math.floor(Math.random() * 4)];
+    title.textContent = msgs[Math.floor(Math.random() * msgs.length)];
+    title.style.color = '#27AE60';
+    subtitle.textContent = 'Đáp án đúng: ' + correctAnswer;
+    speakText(isCorrect ? 'Chính xác, giỏi lắm!' : '', 'vi');
+
+    overlay.classList.add('show');
+
+    if (resultTimer) clearTimeout(resultTimer);
+    resultTimer = setTimeout(() => {
+      overlay.classList.remove('show');
+      showQuestion(currentIndex + 1);
+    }, 1200);
+  } else {
+    overlay.className = 'result-overlay wrong-result';
+    icon.textContent = '❌';
+    title.textContent = 'Chưa đúng rồi!';
+    title.style.color = '#C0392B';
+    subtitle.textContent = 'Đáp án đúng là: ' + correctAnswer;
+    speakText('Ôi không, chưa đúng rồi!', 'vi');
+
+    overlay.classList.add('show');
+
+    if (resultTimer) clearTimeout(resultTimer);
+    resultTimer = setTimeout(() => {
+      overlay.classList.remove('show');
+      showGameOver();
+    }, 2000);
+  }
+}
+
+// ============================================================
+// GAME OVER
+// ============================================================
+function showGameOver() {
+  document.getElementById('go-correct').textContent = correctCount;
+  document.getElementById('go-qnum').textContent = currentIndex + 1;
+
+  if (lastWrong) {
+    document.getElementById('go-qtext').textContent = lastWrong.question;
+    document.getElementById('go-your-ans').textContent = lastWrong.yourAnswer;
+    document.getElementById('go-right-ans').textContent = lastWrong.rightAnswer;
+    document.getElementById('wrong-box').style.display = 'block';
+  } else {
+    document.getElementById('wrong-box').style.display = 'none';
+  }
+
+  showScreen('screen-gameover');
+}
+
+// ============================================================
+// WIN
+// ============================================================
+function showWin() {
+  stopSpeech();
+  const total = gameQuestions.length;
+  document.getElementById('win-score').textContent = correctCount + ' / ' + total;
+
+  if (gameMode === 'random') {
+    document.getElementById('win-sub').textContent = 'Bé đã trả lời đúng cả 30 câu! Tuyệt vời!';
+  } else {
+    document.getElementById('win-sub').textContent =
+      `Bé đã hoàn thành toàn bộ ${total} câu hỏi!`;
+  }
+
+  showScreen('screen-win');
+  createConfetti();
+  speakText('Xuất sắc! Bé đã trả lời đúng tất cả câu hỏi! Chúc mừng!', 'vi');
+}
+
+// ============================================================
+// CONFETTI
+// ============================================================
+function createConfetti() {
+  const container = document.getElementById('confetti');
+  container.innerHTML = '';
+  const colors = ['#FFD700', '#FF8C00', '#C0392B', '#27AE60', '#2980B9', '#FF69B4', '#9B59B6'];
+
+  for (let i = 0; i < 80; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.left = Math.random() * 100 + '%';
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+    piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+    const size = 6 + Math.random() * 10;
+    piece.style.width = size + 'px';
+    piece.style.height = size + 'px';
+    piece.style.animationDuration = (2 + Math.random() * 3) + 's';
+    piece.style.animationDelay = Math.random() * 2 + 's';
+    container.appendChild(piece);
+  }
+}
+
+// ============================================================
+// SOUND EFFECTS (Web Audio API - free, built-in)
+// ============================================================
+let audioCtx = null;
+
+function getAudioCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+
+function playBellSound() {
+  try {
+    const ctx = getAudioCtx();
+    const oscillator = ctx.createOscillator();
+    const gainNode = ctx.createGain();
+    oscillator.connect(gainNode);
+    gainNode.connect(ctx.destination);
+    oscillator.type = 'sine';
+    oscillator.frequency.setValueAtTime(880, ctx.currentTime);
+    oscillator.frequency.exponentialRampToValueAtTime(440, ctx.currentTime + 0.5);
+    gainNode.gain.setValueAtTime(0.5, ctx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.2);
+    oscillator.start(ctx.currentTime);
+    oscillator.stop(ctx.currentTime + 1.2);
+  } catch (e) {}
+}
+
+function playCorrectSound() {
+  try {
+    const ctx = getAudioCtx();
+    [523, 659, 784].forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.frequency.value = freq;
+      osc.type = 'sine';
+      const t = ctx.currentTime + i * 0.12;
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(0.3, t + 0.05);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.4);
+      osc.start(t); osc.stop(t + 0.4);
+    });
+  } catch (e) {}
+}
+
+function playWrongSound() {
+  try {
+    const ctx = getAudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(200, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(80, ctx.currentTime + 0.4);
+    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+    osc.start(); osc.stop(ctx.currentTime + 0.5);
+  } catch (e) {}
+}
+
+// ============================================================
+// KEYBOARD SUPPORT
+// ============================================================
+document.addEventListener('keydown', e => {
+  const screen = document.querySelector('.screen.active');
+  if (!screen || screen.id !== 'screen-game') return;
+
+  const map = { 'a': 0, 'A': 0, '1': 0, 'b': 1, 'B': 1, '2': 1, 'c': 2, 'C': 2, '3': 2 };
+  if (e.key in map) {
+    const btn = document.getElementById(['btn-A', 'btn-B', 'btn-C'][map[e.key]]);
+    if (btn && !btn.disabled) selectAnswer(map[e.key]);
+  }
+
+  if (e.key === ' ' || e.key === 'r') speakCurrent();
+});
+</script>
+</body>
+</html>
