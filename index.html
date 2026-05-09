@@ -1159,7 +1159,11 @@ function showResultOverlay(isCorrect, correctAnswer) {
     if (resultTimer) clearTimeout(resultTimer);
     resultTimer = setTimeout(() => {
       overlay.classList.remove('show');
-      showGameOver();
+      if (gameMode === 'review') {
+        showQuestion(currentIndex);
+      } else {
+        showGameOver();
+      }
     }, 2000);
   }
 }
